@@ -1,4 +1,4 @@
-# UIEncyptPasswordByPublickey
+# FrontEndPublicKeyEncryption
 Topic name: UI code encrypts password by public key which server dynamically generated once user completely inputs password 
 
 As we konwn, Https channel blocks the hachers steal password over network but can not resist invaded virus such as:
