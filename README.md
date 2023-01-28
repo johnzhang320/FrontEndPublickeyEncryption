@@ -1,5 +1,4 @@
-#  Signup Password, Bank Account and Social Security using a Frontend Public Key Encryption Mechanism
-### Supported by Javascript Public Key Library, Java Security KeyPairGenerator, Springboot Security BcryptPasswordencoder, Spring Boot MVC
+##  Using Frontend PublicKey Encryption, Signup Password, Bank Account and Social Security 
 
 ## Overview
 
@@ -46,6 +45,131 @@
    In order to take advantage of BCryptPasswordEncoder, We can not SHA256 ot MD5 hash passwords in UI and use public key 
    to solve this problem.
    
+
+   
+## Project Structure   
+   ![](images/directory_structure.png)
+   
+## Running Environment and Development Tools 
+
+   JDK1.8
+   
+   SpringBoot 2.1.3.RELEASE   
+ 
+   Intellij Community Verson
+   
+   Postman
+   
+   Any Browser
+
+## Dependancy
+   
+  ...  
+  
+  
+  
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.3.RELEASE</version>
+	</parent>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
+		<start-class>com.front.end.pk.encrypt.demo.FrontEndCryptionDemoApplication</start-class>
+	</properties>
+	<dependencies>
+
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk16</artifactId>
+			<version>1.45</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>   <!-- Running externel tomcat server instead of spring boot embedded one-->
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>2.3.5</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tiles</groupId>
+			<artifactId>tiles-jsp</artifactId>
+			<version>3.0.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20160810</version>
+		</dependency>
+		<!--Customized-->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.ant</groupId>
+			<artifactId>ant-apache-regexp</artifactId>
+			<version>1.9.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+   
+   ...
+
+   
 ## Workflow 
 
   ![](images/FrontEndPublicKeyEncryptionConcept.jpg)
@@ -83,7 +207,8 @@
 ```
 code blocks for commands
 ```
-
+## Source code download
+   https://github.com/johnzhang320/front-end-public-key-encryption
 ## Help
 
 Any advise for common problems or issues.
