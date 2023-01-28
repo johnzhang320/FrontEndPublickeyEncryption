@@ -50,12 +50,8 @@ public class FrontEndCryptionDemoController {
 	@RequestMapping(value="/signup",method = RequestMethod.GET)
 	public ModelAndView signupForm(ModelAndView modelAndView)
 			throws Exception {
-		log.info("InitForm() begin");
-
 		modelAndView.setViewName("FrontEndCryptionDemo");
 		modelAndView.addObject("agentTableRequestDto",new AgentTableDto());
-
-		log.info("InitForm end");
 		/**
 		 *  Return to tile definition name: AgentLogin defined in tiles.xml
 		 */
