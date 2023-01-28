@@ -155,6 +155,7 @@
 	
  ...
  
+  
   Here FrontEndCryptionDemo is Signup page handler points tiles.xml body definition, which will call signup page: FrontEndCryptionDemo.jsp 
   conbined with header.jsp and footer.jsp
   
@@ -165,7 +166,9 @@
   
   
   
-  ### JS Request PublicKey and Register Sensitive Fields
+ 
+ 
+ ### JS Request PublicKey and Register Sensitive Fields
   
   ...
   
@@ -185,9 +188,13 @@
   </script>  
   
   ...
+  
+  
   Here stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html") sends PublicKey request to Rest API server  
   I coded stringCryption.js as interface between HTML or JSP page and Public Key Encryption Library query.jcryption-1.1.js, I also
   made some interface change in this library
+  
+  
   
   
   ## KeyPairManager generates public key and also does descryption
