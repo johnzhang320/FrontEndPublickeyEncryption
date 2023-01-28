@@ -193,12 +193,8 @@
    	@RequestMapping(value="/signup",method = RequestMethod.GET)
 	public ModelAndView signupForm(ModelAndView modelAndView)
 			throws Exception {
-		log.info("InitForm() begin");
-
 		modelAndView.setViewName("FrontEndCryptionDemo");
 		modelAndView.addObject("agentTableRequestDto",new AgentTableDto());
-
-		log.info("InitForm end");
 		/**
 		 *  Return to tile definition name: AgentLogin defined in tiles.xml
 		 */
@@ -206,6 +202,15 @@
 	}
 	
  ...
+ 
+  ## Here FrontEndCryptionDemo is Signup page handler , it calls FrontEndCryptionDemo.jsp via Tile.xml body
+  
+  ## Signup jsp name is FrontEndCryptionDemo.jsp, which supported by Spring Taglib and call by Tile.xml body definition, see download code
+  
+  jsp page looks like 
+  
+  ![](images/
+  
   
   As signup page is loaded, StringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html") requests the public key pair from 
   server by API in Spring Restful Controller, StringCryption.initialize register sensetive field in signup form
