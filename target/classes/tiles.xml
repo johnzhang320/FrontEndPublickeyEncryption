@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+
+
+	<!-- =======================================================   
+	  Master definition  									 
+	  =======================================================  -->
+
+
+
+	<definition name="spring.leftMenuWiderLayout" template="/WEB-INF/jsp/common/SpringLeftMenuWiderLayout.jsp">
+		<put-attribute name="header" value="/WEB-INF/jsp/common/header.jsp" />
+		<put-attribute name="body" value="/WEB-INF/jsp/common/blankBody.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/jsp/common/footer.jsp" />
+	</definition>
+	<!-- =======================================================
+	     Child definitions
+	     =======================================================  -->
+
+
+	<definition name="FrontEndCryptionDemo" extends="spring.leftMenuWiderLayout">
+		<put-attribute name="Right" value="/WEB-INF/jsp/common/AgentRightSideBar.jsp" />
+		<put-attribute name="body" value="/WEB-INF/jsp/form/FrontEndCryptionDemo.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/jsp/common/footer_keypair.jsp" />
+	</definition>
+
+
+
+	<definition name="FrontEndCryptionDemoSubmitSuccess" extends="spring.leftMenuWiderLayout">
+		<put-attribute name="body" value="/WEB-INF/jsp/form/FrontEndCryptionDemoSubmitSuccess.jsp" />
+	</definition>
+</tiles-definitions>
