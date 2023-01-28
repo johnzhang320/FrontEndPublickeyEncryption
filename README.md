@@ -1,4 +1,4 @@
-# In frontend, use public key to encrypt password, bank account No., social security No. 
+# Using public key, frontend encrypts password, bank account number, social security number 
 
 ## Description
 
