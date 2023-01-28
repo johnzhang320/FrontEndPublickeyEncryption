@@ -1,4 +1,4 @@
-##  A Signup uses Public Key in frontend to encrypt Password, Bank Account No and Social Security 
+## Encrypting Password, Bank Account # and Social Security at Frontend by Dynamic PublicKey
 
 ## Overview
 
