@@ -2,12 +2,11 @@ package com.front.end.pk.encrypt.demo.fepke_api;
 /**
  *  Singleton ensure keyPair only be created one time
  */
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-
 import java.security.KeyPair;
-
 @Slf4j
-
+@Data
 public class KeyPairManager {
 
 	private static KeyPairManager handler=null;
@@ -57,29 +56,4 @@ public class KeyPairManager {
 		}
 		return retVal;
 	}
-	 
-	public KeyPair getKeyPair() {
-		return keyPair;
-	}
-
-	public void setKeyPair(KeyPair keyPair) {
-		this.keyPair = keyPair;
-	}
-
-	public String getKeyString() {
-		return keyString;
-	}
-
-	public void setKeyString(String keyString) {
-		this.keyString = keyString;
-	}
-
-	public JCryptionUtil getjCryptionUtil() {
-		return jCryptionUtil;
-	}
-
-	public void setjCryptionUtil(JCryptionUtil jCryptionUtil) {
-		this.jCryptionUtil = jCryptionUtil;
-	}
-	
 }
