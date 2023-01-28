@@ -136,7 +136,7 @@
   
   
   
-  ### User sends request to spring MVC Controller  
+  ### User sends the request to Spring MVC Controller  
   
   First of all the user requests a signup, then springboot MVC controller 'GET' this request, return signup page as following code
    
@@ -164,7 +164,8 @@
   
   
   
-  ### Request PublicKey and Register Sensitive Fields
+  
+  ### JS Request PublicKey and Register Sensitive Fields
   
   ...
   
@@ -184,8 +185,14 @@
   </script>  
   
   ...
+  Here stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html") sends PublicKey request to Rest API server  
+  I coded stringCryption.js as interface between HTML or JSP page and Public Key Encryption Library query.jcryption-1.1.js, I also
+  made some interface change in this library
   
-
+  
+  ## KeyPairManager generates public key and also does descryption
+   
+  
 
   ### 
 
