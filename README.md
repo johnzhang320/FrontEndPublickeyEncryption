@@ -1,8 +1,9 @@
-# Using public key, frontend encrypts password, bank account number, social security number 
+#  Signup Password, Bank Account and Social Security using a Frontend Public Key Encryption Mechanism
+### Supported by Javascript Public Key Library, Java Security KeyPairGenerator, Springboot Security BcryptPasswordencoder, Spring Boot MVC
 
-## Description
+## Overview
 
-## Why do we apply frontend encryption ?
+### Why do we apply frontend encryption ?
    
    Although applying Https be able prevent the hackers from stealing sensitive information over network, some invaded virus, 
    like Trojan Horse and Active-X, are able to sneak into your local machine to steal the information through harmless links, 
@@ -16,7 +17,7 @@
    javascript. 
 
 
-## Why do we use Public Key to encrypt sensitive information ?
+### Why do we use Public Key to encrypt sensitive information ?
   
    The sensitive data such as BankAccount Number and Social Security number must be decrypted in server side for 
    further use, normally signup pages consist of first page for creating username and password and press 'Continue' to next
@@ -47,7 +48,21 @@
    
 ## Workflow 
 
+  ![](images/FrontEndPublicKeyEncryptionConcept.jpg)
 
+  ### When load a page to be encrypted, register the sensitive fields as following code:
+  
+  ![](images/register_encrypting_fields.png)
+  
+  As signup page is loaded, StringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html") requests the public key pair from 
+  server by API in Spring Restful Controller, StringCryption.initialize register sensetive field in signup form
+  
+  We can see javascript public key library: jquery.jcryption-1.1.js and I made some interface change on the library 
+  and created the registering code stringCryption.js which check user cursor leave the sensitive field, using 
+  jquery.jcryption-1.1.js to encrypt them immediately
+     
+     
+ 
 
 ## Getting Started
 
