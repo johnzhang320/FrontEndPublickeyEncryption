@@ -66,7 +66,7 @@
    
   ...  
   
-  
+       ..................
   
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -100,12 +100,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>   <!-- Running externel tomcat server instead of spring boot embedded one-->
-		</dependency>
-
-		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
@@ -126,61 +120,21 @@
 			<version>3.0.5</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-jasper</artifactId>
-		</dependency>
 
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.13</version>
-		</dependency>
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20160810</version>
-		</dependency>
-		<!--Customized-->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.ant</groupId>
-			<artifactId>ant-apache-regexp</artifactId>
-			<version>1.9.4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>2.1</version>
-			<scope>provided</scope>
-		</dependency>
+		.......
 
 	</dependencies>
    
    ...
 
-## application.properties
-   
-   ...
-   
-   
-   ...
    
 ## Workflow 
 
   ![](images/FrontEndPublicKeyEncryptionDetail.jpg)
   
   ### Based on workflow, explain each process using code and demo screen as following
+  
+  ### User sends request to spring MVC Controller  
   
   First of all the user requests a signup, then springboot MVC controller 'GET' this request, return signup page as following code
    
@@ -206,136 +160,31 @@
   
   ![](images/signup_empty_page.png)
   
-  FrontEndCryptionDemo.jsp is supported by spring taglib as following
+  ### Request PublicKey and Register Sensitive Fields
   
   ...
   
-<%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
- <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-
-<!-- Front End Encryption library -->
-<script type="text/javascript" src="js/lib/jquery-1.8.0.js"></script>
-<script type="text/javascript" src="js/lib/jquery.jcryption-1.1.js"></script> 
-
-<!-- Front End Encryption Customized Code -->
-<script type="text/javascript"	src="js/utils/stringCryption.js">		
-</script>
-<script type="text/javascript"> 
-	$(document).ready(function(){
+     <script type="text/javascript" src="js/lib/jquery-1.8.0.js"></script>
+     <script type="text/javascript" src="js/lib/jquery.jcryption-1.1.js"></script> 
+     
+       <!-- Front End Encryption Customized Code -->
+     <script type="text/javascript"	src="js/utils/stringCryption.js">		
+     </script>
+       <script type="text/javascript"> 
+	  $(document).ready(function(){
 		stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html")
 	 	stringCryption.initialize("password"); 		  
 		stringCryption.initialize("creditNumber"); 		  
 		stringCryption.initialize("socialSecurity");
-	}); 
-</script>  
-<script type="text/javascript"> 
-	function loginSubmitForm() {
-		document.forms['agentTable'].submit();
-	}
-</script>
-
-<div class="module-title" >
-	<spring:message code="title.agent.login"/>
-</div>
-<div id="errorBox" class="errorblock"></div>
-
-<form:form method="POST" name="agentTable" action="frontEndCryptionDemo.html" modelAttribute="agentTableRequestDto" >
-<fieldset>
-	<legend>
-	<form:errors path="*" cssClass="errorblock" />
-	<span class="AccountCreateTableHeader"><spring:message code="title.password.encrypt"/></span>
-	</legend>
-	<br>
-    	<label style="margin-left: -100px;"  id="usenNameLabel">	<font color="red">*</font>
-    	<spring:message code="label.username"/></label>
-    	<form:input path="userName" size="100"  maxlength="250" cssClass="large" />
-    	<form:errors path="userName" cssClass="errorMsg" />
-
-	<br>
-	<label style="margin-left: -100px;"  id="emailAddressAddressLabel">	<font color="red">*</font>     				 
-	<spring:message code="label.email.address"/></label>
-	<form:input path="emailAddress" size="180"  maxlength="250" cssClass="large" />   
-	<form:errors path="emailAddress" cssClass="errorMsg" /> 
-	<br>
-	
-	<label style="margin-left: -100px;"  id="passwordLabel">		      		 
-	<font color="red">*</font><spring:message code="label.password"/></label>
-	<form:password path="password"  size="100"  maxlength="450" cssClass="large" />
-	<form:errors path="password" cssClass="errorMsg" /> 
-	<br><br>
-	
-</fieldset>	
-<fieldset>
-	<legend>
-	<span class="AccountCreateTableHeader"><spring:message code="title.creditcard.encrypt"/></span>			 
-	</legend>	
-	<label style="margin-left: -100px;"  id="label.credit.number">	<font color="red">*</font>     				 
-	<spring:message code="label.credit.number"/></label>
-	<form:input path="creditNumber" size="180"  maxlength="450" cssClass="large" />   
-	<form:errors path="creditNumber" cssClass="errorMsg" /> 
-	<br>
-	<label style="margin-left: -100px;" id="cardHolderName">					 
-		<spring:message code="label.card.holder.name"/></label>
-		<form:input path="cardHolderName" size="180"  maxlength="450" />                       	 
-		<form:errors path="cardHolderName" cssClass="errorMsg"  />       
-		<br>
-		<label style="margin-left: -100px;" id="expiringDate">				 
-		<spring:message code="label.expiring.date"/></label>
-		<form:input path="expiringDate" size="180"  maxlength="450"  />                       	 
-		<form:errors path="expiringDate" cssClass="errorMsg"  />       
-		<br>
-		<label style="margin-left: -100px;" id="securityCode"> 		 
-		<spring:message code="label.security.code"/></label>
-		<form:input path="securityCode" size="180"  maxlength="450" />                       	 
-		<form:errors path="securityCode" cssClass="errorMsg"  />       
-		<br>				
-</fieldset>
-<fieldset>
-	<legend>
-	<span class="AccountCreateTableHeader"><spring:message code="title.socialsecurity.encrypt"/></span>			 
-	</legend>	
-	<label style="margin-left: -100px;"  id="social.security.number">		      		 
-	<font color="red">*</font><spring:message code="social.security.number"/></label>
-	<form:input path="socialSecurity"  size="180"  maxlength="450" cssClass="large" /> 
-	<form:errors path="socialSecurity" cssClass="errorMsg" /> <br/>
-	<label style="margin-left: -100px;" id="fullName">				 
-		<spring:message code="label.full.name"/></label>
-		<form:input path="fullName" size="180"  maxlength="450" />                       	 
-		<form:errors path="fullName" cssClass="errorMsg"  />       
-		<br>
-	<label style="margin-left: -120px;" id="passwordLabel">&nbsp;	</label> 
-	<input type="button" value="Submit" class="buttonLeft" onClick="javascript:loginSubmitForm();">
-<!-- You can choose either display encrypted string or not display-->			             
-	<br> <textArea id="showEncryptedString" rows="5" style="width:600px;display:none;" >			                 
-	</textArea>         
-	<br>
-	<br>	
-</fieldset>
-</form:form>
-
-<fieldset>
-	<legend>
-	 <span style="color:whilte">Front End Public Key Encryption Flow</span> 
-	</legend>
+	  }); 
+  </script>  
   
-     
-   <img src="images/FrontEndPublicKeyEncryptionConcept.jpg" style="max-width:100%;max-height:100%">   
-</fieldset>
-
   ...
   
-  
-  
-  As signup page is loaded, StringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html") requests the public key pair from 
-  server by API in Spring Restful Controller, StringCryption.initialize register sensetive field in signup form
-  
-  We can see javascript public key library: jquery.jcryption-1.1.js and I made some interface change on the library 
-  and created the registering code stringCryption.js which check user cursor leave the sensitive field, using 
-  jquery.jcryption-1.1.js to encrypt them immediately
-     
+
+
+  ### 
+
      
  
 
