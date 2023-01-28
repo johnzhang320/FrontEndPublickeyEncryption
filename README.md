@@ -1,4 +1,4 @@
-##  Using Frontend PublicKey Encryption, Signup Password, Bank Account and Social Security 
+##  A Signup uses Public Key in frontend to encrypt Password, Bank Account No and Social Security 
 
 ## Overview
 
@@ -172,7 +172,7 @@
    
 ## Workflow 
 
-  ![](images/FrontEndPublicKeyEncryptionConcept.jpg)
+  ![](images/FrontEndPublicKeyEncryptionDetail.jpg)
 
   ### When load a page to be encrypted, register the sensitive fields as following code:
   
