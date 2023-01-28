@@ -169,14 +169,43 @@
    
    ...
 
+## application.properties
+   
+   ...
+   
+   
+   ...
    
 ## Workflow 
 
   ![](images/FrontEndPublicKeyEncryptionDetail.jpg)
+  
+  ### Based on workflow, explain each process using code and demo screen as following
+  
+  ### User request signup page, Springboot MVC controller 
+  
+  
 
   ### When load a page to be encrypted, register the sensitive fields as following code:
   
-  ![](images/register_encrypting_fields.png)
+ ...
+ 
+   	@RequestMapping(value="/signup",method = RequestMethod.GET)
+	public ModelAndView signupForm(ModelAndView modelAndView)
+			throws Exception {
+		log.info("InitForm() begin");
+
+		modelAndView.setViewName("FrontEndCryptionDemo");
+		modelAndView.addObject("agentTableRequestDto",new AgentTableDto());
+
+		log.info("InitForm end");
+		/**
+		 *  Return to tile definition name: AgentLogin defined in tiles.xml
+		 */
+		return modelAndView;
+	}
+	
+ ...
   
   As signup page is loaded, StringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html") requests the public key pair from 
   server by API in Spring Restful Controller, StringCryption.initialize register sensetive field in signup form
