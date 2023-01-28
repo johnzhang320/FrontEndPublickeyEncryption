@@ -134,6 +134,8 @@
   
   ### Based on workflow, explain each process using code and demo screen as following
   
+  
+  
   ### User sends request to spring MVC Controller  
   
   First of all the user requests a signup, then springboot MVC controller 'GET' this request, return signup page as following code
@@ -159,6 +161,8 @@
   FrontEndCryptionDemo.jsp as signup page, displays as following: 
   
   ![](images/signup_empty_page.png)
+  
+  
   
   ### Request PublicKey and Register Sensitive Fields
   
