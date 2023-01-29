@@ -1,46 +1,50 @@
-## Encrypting Password, Bank Account # and Social Security at Frontend by Dynamic PublicKey
-
+## Apply Frontend Public Key Encryption(FEPKE) to signup Password, Bank Account # and Social Security
+### An Useful Signup Code Implementation and Demo 
 ## Overview
 
-### Why do we apply frontend encryption ?
+### Why and how do we apply frontend encryption ?
    
-   Although applying Https be able prevent the hackers from stealing sensitive information over network, some invaded virus, 
-   like Trojan Horse and Active-X, are able to sneak into your local machine to steal the information through harmless links, 
-   misleading email,a falsified website, or a fake advertisement.
+   Https (TLS) be able to encrypt internet channel to prevent the hackers from stealing sensitive data in network, however, 
+   some invaded viruses, like Trojan Horse and Active-X, still are able to sneak into your local machine to steal the data
+   by means of harmless links, misleading email,a falsified website, or a fake advertisement.
       
-   They are using keylogger to make system call to log the keystroke and record critical javascript variable, using 
-   Rainbow table guess your hashed password in UI
+   They are using keylogger to make system call to log the keystroke, recording critical javascript variables or using 
+   hugh Hash Strings of 'Rainbow table' to guess your hashed password sent be UI
       
    We attempt to hide the sensitive form field variables and when we complete enter sensitive field and leave focus from 
    the field, encrypt the data that you just entered, dynamically obtain pubic key from server to encrypt form field by 
    javascript. 
 
 
-### Why do we use Public Key to encrypt sensitive information ?
+### Why do we use Public Key to encrypt sensitive data in frontend?
   
-   The sensitive data such as BankAccount Number and Social Security number must be decrypted in server side for 
-   further use, normally signup pages consist of first page for creating username and password and press 'Continue' to next
+   First of all, some sensitive data such as BankAccount number and Social Security number must be decrypted in server 
+   side for further business use. So apply public key cryptography to be able to decrypt those data to plain text in 
+   Server side and encrypt the data in frontend before user submit the data form.
+   
+   Secondly, signup pages normally consist of first page for creating username and password and press 'Continue' to next
    pages , until getting 'Submit' page, sensitive information plain texts will stay for a while between pages, which 
-   give the invaded virus timing chance to steal them, on this mechinism, people leave those fields immediately encrypt
-   to eliminate the chance those viruses stealing the information
+   give the invaded virus a timing chance to steal them, on this mechinism, people leave those fields immediately encrypt
+   to eliminate the chance for those viruses to steal the information
 
    Regarding of the password, some developers may use one time hash algorithm, such as SHA256 or MD5, to hash password 
    in UI and send to server save it to Database.
        
    This way leaves the room for "Rain Table" which holds Hugh Hashed Strings to brute force 'Guess' hashed password, we 
    use public key cryptography to be able to avoid this hash "Guess' because PublicKey-encrypted RSA String is different 
-   from Hashed String and even more complicated(1024, 2048 bytes etc). 
+   from those Hashed String and even more complicated(1024, 2048 bytes etc). 
        
    On this mechanism, each time when a user loads the Signup page, the server will generate a new public key which is 
    different from previous public key as users loaded the same Signup page previously.
     
    Since Spring Boot 2.0, Spring Security uses BCryptPasswordEncoder to save salt hashed password, for the same password 
    plain text, this encoder generates a different encoded string, we save this encoded password string to the database. 
-   Rain Table is delimaly to guess changeable hashed password.
+   Rain Table is hard to guess the changeable hashed password.
     
-   But BCryptPasswordEncoder.matched(passwordPlainText, database_saved_bcrypted_password) required passwordPlainText, 
+   The method: BCryptPasswordEncoder.matchers(passwordPlainText, database_saved_bcrypted_password) required passwordPlainText, 
    FEPKE mechanism encrypts password in the UI side and provide a decrypt method in server side to get password plain 
-   text, then we can validate if same username to use the same password. 
+   text, then for the important password handling--password validation, we can validate wheather same user try to create the 
+   same password as he/she already created !
     
    In order to take advantage of BCryptPasswordEncoder, We can not SHA256 ot MD5 hash passwords in UI and use public key 
    to solve this problem.
@@ -62,7 +66,22 @@
    
    Any Browser
 
-## Dependancy
+## Dependencies
+### Major Dependencies
+    
+    org.bouncycastle.bcprov-jdk16.1.45  --- Generates Public Key Pair, Private Key Pair, descrypts FEPKEed data to plain text
+    
+    Spring boot 2.1.3
+    Spring boot Web                     --- Spring MVC for Demo 
+    org.apache.tile.tiles-jsp.3.0.5     --- Support view header, menu, body and footer
+    Spring boot Security                --- Apply BCryptPasswordEncoder for password saving and password validation
+    Spring boot JPA Data / MySQL        --- Signup data Model database access
+    
+    org.modelmapper.2.3.5               --- Model To Dto or Dto to Model conversion
+    
+    org.projectlombok                   
+    
+    
    
   ...  
   
@@ -132,13 +151,13 @@
 
   ![](images/FrontEndPublicKeyEncryptionDetail.jpg)
   
-  ### Based on workflow, explain each process using code and demo screen as following
+  ### Based on workflow, we will explain each part using description, code and demo
   
   
   
-  ### User sends the request to Spring MVC Controller  
+  ### A Signup Request to Spring MVC Controller  
   
-  First of all the user requests a signup, then springboot MVC controller 'GET' this request, return signup page as following code
+  First of all, the user send a signup request to server, springboot MVC controller 'GET' this request, load signup page:
    
  ...
  
@@ -168,7 +187,10 @@
   
  
  
- ### JS Request PublicKey and Register Sensitive Fields
+ ### How JS request Public Key and register sensitive data fields
+ 
+     In begin of FrontEndCryptionDemo.jsp, we have following pieces of javascript code, before jsp page load jQuery uses 
+     $(document).ready(function() method to send public key request to server then initialize (register) protectig fields
   
   ...
   
@@ -190,14 +212,15 @@
   ...
   
   
-  Here stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html") sends PublicKey request to Rest API server  
+  Here stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html") sends PublicKey request to Rest API server which 
+  call KeypairManager to create dynamic public key
   I coded stringCryption.js as interface between HTML or JSP page and Public Key Encryption Library query.jcryption-1.1.js, I also
   made some interface change in this library
   
   
   
   
-  ## KeyPairManager generates public key and also does descryption
+  ## KeyPairManager generates Public Key Pair, Private Key Pair and descrypts FEPKEed data to plain text
    
   
   ...
