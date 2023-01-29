@@ -1,5 +1,5 @@
-## Apply Frontend Public Key Encryption(FEPKE) to signup Password, Bank Account # and Social Security
-### An Useful Signup Code Implementation and Demo 
+## Use Frontend Public Key to encrypt Password, Bank Account # and Social Security
+### Introduce an Useful Signup Code Implementation and Demo 
 ## Overview
 
 ### Why and how do we apply frontend encryption ?
@@ -66,9 +66,9 @@
    
    Any Browser
    
-   #Especially setup Intellij Project Structure to JDK 1.8
+   #Especially ensure to setup Intellij Project Structure to JDK 1.8 for key generator
    
-   ![](images/ensure_setup_projectand sdks_jdk_1.8.mov)
+   ![](images/Intellij_project_sdks_in_jdk1.8.png)
 
 ## Dependencies
 ### Major Dependencies
@@ -297,6 +297,11 @@
   
   
   publickey pair (e,n) and model number md , which will be sent back to StringCryption.js
+  
+  
+  ###Here is an example about Public Key RSA Cryptography 
+  
+  !
 
   ### 
 
