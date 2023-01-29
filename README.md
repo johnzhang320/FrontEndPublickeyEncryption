@@ -65,6 +65,10 @@
    Postman
    
    Any Browser
+   
+   #Especially setup Intellij Project Structure to JDK 1.8
+   
+   ![](images/ensure_setup_projectand sdks_jdk_1.8.mov)
 
 ## Dependencies
 ### Major Dependencies
