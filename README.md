@@ -53,7 +53,7 @@
    
 ## Project Structure   
 
-   ![](images/directory_structure.png)
+   ![](images/project_structure.png)  
    
 ## Running Environment and Development Tools 
 
