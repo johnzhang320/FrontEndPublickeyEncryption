@@ -313,7 +313,7 @@
   
   /FrontEndPublicKeyEncryption/getKeyPair.html will return (e,n) in asscii character format, this URL is synchronized request
      
-### (6) Register Password, Bank A/c and Social Security as Frontend Public Key Encrypting (FEPKE) fields
+## (6) Register Password, Bank A/c and Social Security as Frontend Public Key Encrypting (FEPKE) fields
       
   	 	stringCryption.initialize("password"); 		  
 		stringCryption.initialize("creditNumber"); 		  
@@ -323,20 +323,19 @@
     I also made some synchronize ajax call in this library.
     
     
-### (7) Spring MVC return the signup page to user as followig empty page which let user enter data
+## (7) Spring MVC return the signup page to user as followig empty page which let user enter data
 
    <img src="images/signup_empty_page_for_dto.png" width="50%" height="50%">
    
     We call loan agent sigup page, therefore we create AgentTableDto to accept user entered data and cipherText data encrypted by 
     Javascript as following code and also do server side data validation, especially password
     
-    <img src="images/AgentTableDto.png" width="60%" height="70">
-    
+     
+    <img src="images/AgentTableDto.png" width="60%" height="80%">
     
     Create JPA Model class AgentTable to access MySQL database
     
-    <img src="images/AgentTable.png" width="60%" height="70">
-    
+     <img src="images/AgentTable.png" width="60%" height="80%">
    
 
 ## Getting Started
