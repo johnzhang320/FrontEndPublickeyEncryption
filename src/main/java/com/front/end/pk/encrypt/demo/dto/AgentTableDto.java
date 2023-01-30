@@ -11,10 +11,11 @@ import javax.validation.constraints.*;
 /**
  * Agents entity. @author MyEclipse Persistence Tools
  */
-@Data
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Data
 public class AgentTableDto {
 
 	@NotBlank(message = "Username is required")
