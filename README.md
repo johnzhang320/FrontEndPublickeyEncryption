@@ -227,9 +227,11 @@
    
    <img src="images/frontend_publickey_encrption_jsp.png" width="60%" height="70%">
    
-   the StringCryption.js is interface between front end public key encryption library and view layer (jsp)
+   StringCryption.js is interface between front end public key encryption library and view layer (jsp)
    
-   <img src= 
+   We can find line 42 is method getKeyPair and line 51 is method public key encrypt in javascript literal class
+   
+   <img src="images/StringCryptionJS.png" width="60%" height="70%">
   
 # (4) KeyPairManager generates Public Key pair (e,n) and model and Private Key pair
 
@@ -325,68 +327,17 @@
 
    <img src="images/signup_empty_page_for_dto.png" width="50%" height="50%">
    
-    We call loan agent sigup page, therefore we create agentTableDto to accept user entered data and cipherText data encrypt by 
-    Javascript
+    We call loan agent sigup page, therefore we create AgentTableDto to accept user entered data and cipherText data encrypted by 
+    Javascript as following code and also do server side data validation, especially password
     
-    As we known, Spring boot presentative layer we use DTO to accept raw entered data and supper basic validation work by javax
-    validation annotations
+    <img src="images/AgentTableDto.png" width="60%" height="70">
     
-    ...
     
-package com.front.end.pk.encrypt.demo.dto;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
-import javax.validation.constraints.*;
-
-
-/**
- * Agents entity. @author MyEclipse Persistence Tools
- */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class AgentTableDto {
-
-	@NotBlank(message = "Username is required")
-	private String userName;
-	
-	@NotBlank(message="password is required")
-	private String password;
-
-	@Email(message = "Email is invalid", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
-	private String emailAddress;
-	
-	@NotBlank(message="CreditNumber is required")
-	private String creditNumber;
-	
-	@NotBlank(message = "Credit Card Holder is required")
-	private String cardHolderName;
-	
-	@NotBlank(message = "Expired Date is required")
-	@DateTimeFormat(pattern = "mm/yy")
-	private String expiringDate;
-	
-	@NotBlank(message = "Security Code is required")
-	private String securityCode;
-	
-	@NotBlank(message = "Social Security Number is required")
-	private String socialSecurity;
-	
-	@NotBlank(message = "SSO full name is required")
-	
-	private String fullName;
-	
-	private Boolean passwordMatched;
-	
-	private String message;
-}
-    ...
+    Create JPA Model class AgentTable to access MySQL database
     
+    <img src="images/AgentTable.png" width="60%" height="70">
+    
+   
 
 ## Getting Started
 
