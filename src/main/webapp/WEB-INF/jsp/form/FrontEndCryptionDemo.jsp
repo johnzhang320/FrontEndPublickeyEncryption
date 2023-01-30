@@ -24,28 +24,22 @@
 		document.forms['agentTable'].submit();
 	}
 </script>
-
 <div class="module-title" >
 	<spring:message code="title.agent.login"/>
 </div>
 <div id="errorBox" class="errorblock"></div>
-   
-
-
 
 <form:form method="POST" name="agentTable" action="frontEndCryptionDemo.html" modelAttribute="agentTableRequestDto" >
 <fieldset>
 	<legend>
 	<form:errors path="*" cssClass="errorblock" />
 	<span class="AccountCreateTableHeader"><spring:message code="title.password.encrypt"/></span>
-	</legend>
-	<br>
+	</legend><br>
     	<label style="margin-left: -100px;"  id="usenNameLabel">	<font color="red">*</font>
     	<spring:message code="label.username"/></label>
     	<form:input path="userName" size="100"  maxlength="250" cssClass="large" />
-    	<form:errors path="userName" cssClass="errorMsg" />
+    	<form:errors path="userName" cssClass="errorMsg" /><br>
 
-	<br>
 	<label style="margin-left: -100px;"  id="emailAddressAddressLabel">	<font color="red">*</font>     				 
 	<spring:message code="label.email.address"/></label>
 	<form:input path="emailAddress" size="180"  maxlength="250" cssClass="large" />   
