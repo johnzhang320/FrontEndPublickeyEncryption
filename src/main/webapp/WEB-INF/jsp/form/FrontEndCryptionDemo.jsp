@@ -29,7 +29,8 @@
 </div>
 <div id="errorBox" class="errorblock"></div>
 
-<form:form method="POST" name="agentTable" action="frontEndCryptionDemo.html" modelAttribute="agentTableRequestDto" >
+<form:form method="POST" name="agentTable" action="frontEndCryptionDemo.html"
+                                           modelAttribute="agentTableRequestDto" >
 <fieldset>
 	<legend>
 	<form:errors path="*" cssClass="errorblock" />
