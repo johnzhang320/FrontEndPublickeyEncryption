@@ -52,6 +52,7 @@
 
    
 ## Project Structure   
+
    ![](images/directory_structure.png)
    
 ## Running Environment and Development Tools 
@@ -151,17 +152,55 @@
    ...
 
    
-## Workflow 
+### Workflow Chart
 
   ![](images/FrontEndPublicKeyEncryptionDetail.jpg)
   
-  ### Based on workflow, we will explain each part using description, code and demo
+  ## Based on the sequence No. (1), (2),(3).....(21) of each arrows in workflow chart, we will explain function with description, the code and demo
   
   
   
-  ### A Signup Request to Spring MVC Controller  
+  ### (1) - Signup Request 
+     
+      http://localhost:8080/FrontEndPublicKeyEncryption/signup
+      
+      FrontEndPublicKeyEncryption is defined as contextPath in application.properties
+      
+      server.servlet.contextPath=/FrontEndPublicKeyEncryption
+      
+      If apply Spring Security, run any web page popout its default login page, before Spring Boot 2.7.8, we can use 
+      WebSecurityConfigurerAdapter disable default login page and allow /signup and /getKeypair.html to work without 
+      authentication 
+      
+      
+      ...
+        
+     @EnableWebSecurity
+     @Configuration
+     public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception
+        {
+            http.csrf().disable()
+            .authorizeRequests()
+                  .antMatchers(
+                          "/",
+                          "/signup",
+                          "/savePassword",
+                        "/getKeyPair.html").permitAll()
+                  .and().formLogin().disable();
+
+         }
+     }
+
+      
+      ...
+      
+      
+      
   
-  First of all, the user send a signup request to server, springboot MVC controller 'GET' this request, load signup page:
+  (2) Spring MVC Controller get such request, load signup page:
    
  ...
  
@@ -179,25 +218,14 @@
  ...
  
   
-  Here FrontEndCryptionDemo is Signup page handler points tiles.xml body definition, which will call signup page: FrontEndCryptionDemo.jsp 
-  conbined with header.jsp and footer.jsp
-  
-  FrontEndCryptionDemo.jsp as signup page, displays as following: 
-  
-  ![](images/signup_empty_page.png)
-  
-  
-  
-  
- 
- 
- ### How JS request Public Key and register sensitive data fields
- 
-     In begin of FrontEndCryptionDemo.jsp, we have following pieces of javascript code, before jsp page load jQuery uses 
-     $(document).ready(function() method to send public key request to server then initialize (register) protectig fields
-  
+  Here FrontEndCryptionDemo is Signup page handler points signup definition in tiles.xml, signup page body code is FrontEndCryptionDemo.jsp, coming 
+  with header.jsp and footer.jsp (see code source)
+
+## (3) Before Load JSP HTML context, send Public Key request
+   
+   stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html") send public key request to keypairManager via Rest API
+   
   ...
-  
      <script type="text/javascript" src="js/lib/jquery-1.8.0.js"></script>
      <script type="text/javascript" src="js/lib/jquery.jcryption-1.1.js"></script> 
      
@@ -215,20 +243,9 @@
   
   ...
   
-  
-  Here stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html") sends PublicKey request to Rest API server which 
-  call KeypairManager to create dynamic public key
-  I coded stringCryption.js as interface between HTML or JSP page and Public Key Encryption Library query.jcryption-1.1.js, I also
-  made some interface change in this library
-  
-  
-  
-  
-  ## KeyPairManager generates Public Key Pair, Private Key Pair and descrypts FEPKEed data to plain text
-   
-  
+### (4) KeyPairManager generates Public Key pair (e,n) and model and Private Key pair
+
   ...
-  
 
      package com.front.end.pk.encrypt.demo.fepke_api;
 
@@ -296,17 +313,29 @@
   ...
   
   
-  publickey pair (e,n) and model number md , which will be sent back to StringCryption.js
+   
+  ### (5) Here is an sample to explain Public Key RSA Cryptography 
   
-  
-  ###Here is an example about Public Key RSA Cryptography 
-  
-  !
+  ![](images/RSA_Cryptography.png)
 
-  ### 
-
+  In above diagram, (e,n) is public key pair and (d,n) is private key pair, M is plainText, public key encrypt is C=(M^e) mod n , 
+  private key decrypt is D = (C^d) mod n.  
+  
+  /FrontEndPublicKeyEncryption/getKeyPair.html will return (e,n) in asscii character format, this URL is synchronized request
      
- 
+### (6) Register Password, Bank A/c and Social Security as Frontend Public Key Encrypting (FEPKE) fields
+      
+  	 	stringCryption.initialize("password"); 		  
+		stringCryption.initialize("creditNumber"); 		  
+		stringCryption.initialize("socialSecurity");
+		
+    I made stringCryption.js as an interface between JSP and Javascript public key encryption library: jquery.jcryption-1.1.js,
+    I also made some synchronize ajax call in this library.
+    
+    
+### (7) Spring MVC return the signup page to user as followig empty page which let user enter data
+
+   
 
 ## Getting Started
 
