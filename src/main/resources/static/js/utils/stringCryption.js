@@ -48,7 +48,6 @@
 		   return publicKey;
 	  },
 	  
-	
 	  encrypt: function(elementId) {
 		  if (stringCryption_.isBlank(publicKey)) {
 			  alert("Please call stringCryption.initialize() first or check if publicKey URL is correct, URL="+URL);

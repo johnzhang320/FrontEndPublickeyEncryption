@@ -8,7 +8,6 @@ import java.security.KeyPair;
 @Slf4j
 @Data
 public class KeyPairManager {
-
 	private static KeyPairManager handler=null;
 	private KeyPair keyPair=null; 
 	private String keyString=null;
@@ -40,7 +39,8 @@ public class KeyPairManager {
 			 output.append(md);  
 			 output.append("\"}");  
 			 output.toString();  
-			 keyString = output.toString().replaceAll("\r", "").replaceAll("\n", "").trim();  
+			 keyString = output.toString().replaceAll("\r", "")
+					                    .replaceAll("\n", "").trim();
 		} catch (Exception e) {
 			log.info("Generate Key Failed because of "+e.getMessage());
 		}
