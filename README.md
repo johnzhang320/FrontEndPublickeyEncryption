@@ -51,11 +51,11 @@
    
 
    
-## Project Structure   
-
-   ![](images/project_structure.png)  
+# Project Structure   
    
-## Running Environment and Development Tools 
+   <img src="images/project_structure.png" width="40%" height="40%">
+   
+# Running Environment and Development Tools 
 
    JDK1.8
    
@@ -67,11 +67,10 @@
    
    Any Browser
    
-   #Especially ensure to setup Intellij Project Structure to JDK 1.8 for key generator
-   
-   ![](images/Intellij_project_sdks_in_jdk1.8.png)
+   ### Especially ensure to setup Intellij Project Structure to JDK 1.8 for key generator
+  
 
-## Dependencies
+# Dependencies
 ### Major Dependencies
     
     org.bouncycastle.bcprov-jdk16.1.45  --- Generates Public Key Pair, Private Key Pair, descrypts FEPKEed data to plain text
@@ -152,7 +151,7 @@
    ...
 
    
-### Workflow Chart
+# Workflow Chart
 
   ![](images/FrontEndPublicKeyEncryptionDetail.jpg)
   
@@ -160,7 +159,7 @@
   
   
   
-  ### (1) - Signup Request 
+  # (1) - Signup Request 
      
       http://localhost:8080/FrontEndPublicKeyEncryption/signup
       
@@ -200,7 +199,7 @@
       
       
   
-  (2) Spring MVC Controller get such request, load signup page:
+  # (2) Spring MVC Controller get such request, load signup page:
    
  ...
  
@@ -221,29 +220,18 @@
   Here FrontEndCryptionDemo is Signup page handler points signup definition in tiles.xml, signup page body code is FrontEndCryptionDemo.jsp, coming 
   with header.jsp and footer.jsp (see code source)
 
-## (3) Before Load JSP HTML context, send Public Key request
+# (3) Before Load JSP HTML context, send Public Key request
    
    stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html") send public key request to keypairManager via Rest API
+   see line 16 as below code
    
-  ...
-     <script type="text/javascript" src="js/lib/jquery-1.8.0.js"></script>
-     <script type="text/javascript" src="js/lib/jquery.jcryption-1.1.js"></script> 
-     
-       <!-- Front End Encryption Customized Code -->
-     <script type="text/javascript"	src="js/utils/stringCryption.js">		
-     </script>
-       <script type="text/javascript"> 
-	  $(document).ready(function(){
-		stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html")
-	 	stringCryption.initialize("password"); 		  
-		stringCryption.initialize("creditNumber"); 		  
-		stringCryption.initialize("socialSecurity");
-	  }); 
-  </script>  
+   <img src="images/frontend_publickey_encrption_jsp.png" width="60%" height="70%">
+   
+   the StringCryption.js is interface between front end public key encryption library and view layer (jsp)
+   
+   <img src= 
   
-  ...
-  
-### (4) KeyPairManager generates Public Key pair (e,n) and model and Private Key pair
+# (4) KeyPairManager generates Public Key pair (e,n) and model and Private Key pair
 
   ...
 
@@ -316,7 +304,7 @@
    
   ### (5) Here is an sample to explain Public Key RSA Cryptography 
   
-  ![](images/RSA_Cryptography.png)
+  <img src="images/RSA_Cryptography.png" width="60%" height="80%">
 
   In above diagram, (e,n) is public key pair and (d,n) is private key pair, M is plainText, public key encrypt is C=(M^e) mod n , 
   private key decrypt is D = (C^d) mod n.  
@@ -335,7 +323,7 @@
     
 ### (7) Spring MVC return the signup page to user as followig empty page which let user enter data
 
-   ![](images/signup_empty_page_for_dto.png)
+   <img src="images/signup_empty_page_for_dto.png" width="50%" height="50%">
    
     We call loan agent sigup page, therefore we create agentTableDto to accept user entered data and cipherText data encrypt by 
     Javascript
@@ -345,7 +333,7 @@
     
     ...
     
-    package com.front.end.pk.encrypt.demo.dto;
+package com.front.end.pk.encrypt.demo.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
