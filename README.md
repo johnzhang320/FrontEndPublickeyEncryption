@@ -1,5 +1,7 @@
-# Encrypt Password, Bank Account # and Social Security by Frontend Public Key
-### A Secure Signup Project Implementation and Demo 
+# Frontend Public Key Encryption of Password, Bank Account # and Social Security
+##  _____________ A Secure Signup Solution Implementation and Demo _________________
+
+
 ## Overview
 
 ### Why and how do we apply frontend encryption ?
@@ -322,7 +324,72 @@
 		stringCryption.initialize("socialSecurity");
 		
     I made stringCryption.js as an interface between JSP and Javascript public key encryption library: 
-    jquery.jcryption-1.1.js, I also made some synchronize ajax call in this library.
+    jquery.jcryption-1.1.js, I also made some secure change this library.
+    
+#   Secure Consideration of Javascript
+    
+    We use fronten Public Key to encrypt sensitive data, maybe people ask when the pass sensitive data to 
+    encrypt method into the library, we need variable to contain the data, using Chrome Inspect->Source or
+    other debug way we can easily find sensitive data like password from that variable
+    
+    Thanks for JQuery provides $(ElementId).val() method, we can hide data from Javascript debug. We have
+    piece of code StringCryption.js for key bur event, especially we separate elementId literal string variable 
+    and id representive symbol "#" and cacatenated together 
+    
+    $("#"+elementId).val() , elementId variable may contain "password" , "banckAccountNo" etc
+    
+    Chrome "inspect"->"source" can not see such sensitive data any more
+    
+    <img src="images/.png" width="50%" height="50%">
+    
+    
+    
+     
+    
+    
+   
+...
+   var stringCryption_ = {   
+       ........
+     initialize: function (encryptField) {
+		
+      .......
+	 $("#"+encryptField).blur(function(){
+              if(!stringCryption_.isBlank($(this).val())) {
+	              var encString =stringCryption_.encrypt(encryptField);
+              }
+	 }); 
+	 
+    }
+...
+    
+    
+    Inside of literal class stringCryption_ , we have encrypt method to call the library
+...
+	  encrypt: function(elementId) {
+		  if (stringCryption_.isBlank(publicKey)) {
+			  alert("Please call stringCryption.initialize() first or check if publicKey URL is correct, URL="+URL);
+			  return null;
+		  } 
+	      // no sensitive value variables can be seen by chrome infect or other javascript dev tool
+		  if (stringCryption_.isBlank($("#"+elementId).val())) {
+			  return null;
+		  }
+		  $.jCryption.secure_encrypt(elementId, publicKey, function(encryptedValue) {
+
+			 $("#"+elementId).val(encryptedValue);
+			  var encDiv= document.getElementById(SHOW_ENC_STRING_ID);	         	
+         	  if (null!=encDiv) {
+         		  encDiv.style.display="block";
+         		  encDiv.innerHTML="Encrypted String:\n"+encryptedValue;
+         	  }
+			  encryptedString = encryptedValue;
+          });  
+		  return encryptedString;
+   }, 
+...
+ 
+    
     
     
 ## (7) Spring MVC return empty signup page and let user enter data
@@ -554,11 +621,42 @@ logging.level.org.hibernate.type=INFO
 
 ##  This is proof for FEPKE algorithm not only encript password at frontend but also verify if entered password valid !!
 
-  <img src="images/enter_repeated_password_for_existing_user.png">
+  <img src="images/enter_repeated_password_for_existing_user.png" width="50%" height="50%">
 
 ## (17) (19) If new user or existing user with new password, save BCryptPasswordEncoded Password to MySQL
 
-##   
+...
+
+                        /**
+	                 *  if the record exists for this username, means this time update exist record
+			 */
+		       if (existAgentTable!=null) {
+				agentTableDao.setAgentId(existAgentTable.getAgentId());
+			}
+			/**
+			 * Save bcrypt encoded password to database by agentTableDao
+			 */
+			String bcryptedPassword= encoderService.bcryptEncodingPassword(passwordPlanText);
+
+			agentTableDao.setPassword(bcryptedPassword);
+
+			/**
+			 *  save creditCardNumberPlainText and socialSecurityNumberPlanText to database
+			 *  for further business use
+			 */
+
+			agentTableDao.setCreditNumber(creditCardNumberPlanText);
+			agentTableDao.setSocialSecurity(socialSecurityNumberPlanText);
+
+			/**
+			 *  save to database
+			 */
+			agentTableRepository.save(agentTableDao);
+				
+
+...
+
+
 
 ## Getting Started
 
