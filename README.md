@@ -1,5 +1,5 @@
-# Use Frontend Public Key to encrypt Password, Bank Account # and Social Security
-### Introduce an Useful Signup Code Implementation and Demo 
+# Encrypt Password, Bank Account # and Social Security by Frontend Public Key
+### A Secure Signup Project Implementation and Demo 
 ## Overview
 
 ### Why and how do we apply frontend encryption ?
@@ -160,7 +160,7 @@
   
  
   
-  # (1) - Signup Request 
+  ## (1) - Signup Request 
      
       http://localhost:8080/FrontEndPublicKeyEncryption/signup
       
@@ -200,7 +200,7 @@
       
       
   
-  # (2) Spring MVC Controller accept GET request and load signup page:
+  ## (2) Spring MVC Controller accept GET request and load signup page:
    
  ...
  
@@ -218,10 +218,10 @@
  ...
  
   
-  Here FrontEndCryptionDemo is Signup page handler points signup definition in tiles.xml, signup page body code is FrontEndCryptionDemo.jsp, coming 
-  with header.jsp and footer.jsp (see code source)
+  Here FrontEndCryptionDemo is Signup page handler points signup definition in tiles.xml, signup page body 
+  code is FrontEndCryptionDemo.jsp, coming along with header.jsp and footer.jsp (see code source)
 
-# (3) Before Load JSP HTML context, send Public Key request
+ ## (3) Before Load JSP HTML context, send Public Key request
    
    stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html") send public key request to 
    keypairManager via Rest API see line 16 as below code
@@ -234,7 +234,7 @@
    
    <img src="images/StringCryptionJS.png" width="60%" height="70%">
   
-# (4) KeyPairManager generates Public Key pair (e,n) and Private Key pair(d,n)
+## (4) KeyPairManager generates Public Key pair (e,n) and Private Key pair(d,n)
 
   ...
 
@@ -305,7 +305,7 @@
   
   
    
-  ### (5) An sample to explain Public Key RSA Cryptography 
+  ## (5) An sample to explain Public Key RSA Cryptography 
   
   <img src="images/RSA_Cryptography.png" width="60%" height="80%">
 
@@ -377,7 +377,7 @@
   <img src="images/AgentTable_Model.png"  width="60%" height="60%">
   
   application.properties configure MySQL 
-  # spring.jpa.hibernate.ddl-auto = create if first time run this code
+  ## spring.jpa.hibernate.ddl-auto = create if first time run this code
 ...
 
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
@@ -399,22 +399,22 @@ logging.level.org.hibernate.type=INFO
 ...
   
    
-# (8) User enters data include password, bank account and social security 
+## (8) User enters data include password, bank account and social security 
 
-## Below diagram show that the user type password and cursor is still in password field 
+### Below diagram show that the user type password and cursor is still in password field 
   
  <img src="images/enter_password_not_finish_yet.png" width="50%" height="50%">
  
-# (9) Key Blur Event be triggered
-# (10) Javascript sends the password to jquery.jCryption.1.1.js to encrypt at frontend
-# (11) JSP display the ciper text password to User
+## (9) Key Blur Event be triggered
+## (10) Javascript sends the password to jquery.jCryption.1.1.js to encrypt at frontend
+## (11) JSP display the ciper text password to User
   (9) - (11) working result is:
   Once the user finished entering password and cursor is leave password field, the encrypt ciphertext be show
 
   <img src="images/enter_password_done_and_cursor_leave.png" width="50%" height="50%">
 
 
-# (12) Entered all signup data and ready to submit, signup page looks like: 
+## (12) Entered all signup data and ready to submit, signup page looks like: 
 
   Now bank account and social security fields contain cipher text data too.
   
@@ -423,7 +423,7 @@ logging.level.org.hibernate.type=INFO
   Once user press "Submit' button, submitted data will be send to Spring MVC Controller by issuing form
   POST request
   
-# (13) Spring MVC controller accept a POST request to following works
+## (13) Spring MVC controller accept a POST request to following works
        
        check the validation error in BindResult, the @Valid annotation check the AgentTableDto vailidation
        condition such as @NotBlank
@@ -454,7 +454,7 @@ logging.level.org.hibernate.type=INFO
      
      <img src="images/BasicVaildation.png" width="50%" height="50%">  
      
-#  (14)  Mapper DTO to Model and Decrypt the data  
+## (14)  Mapper DTO to Model and Decrypt the data  
        
          
 ...
@@ -485,7 +485,7 @@ logging.level.org.hibernate.type=INFO
 
 
 
-# (15) (21) Call AgentTableService to validate password deeply
+## (15) (21) Call AgentTableService to validate password deeply
 
 ## agentTableService.validatPasswordReturnExistAgentTable
    If validation failed , this service method will throw PasswordException, Spring MVC controller catch this exception 
@@ -508,7 +508,7 @@ logging.level.org.hibernate.type=INFO
 			}
 ...
 
-# (15) (16) (18) (20) check exist user and same user using repeated password by agentTableService, it does following works
+## (15) (16) (18) (20) check exist user and same user using repeated password by agentTableService, it does following works
 ## This is reason why we use BCryptPasswordEncoder.matches
 
     Verify if password length is 8 ~15 chars and then using BCryptPasswordEncoder.matches
@@ -556,7 +556,7 @@ logging.level.org.hibernate.type=INFO
 
   <img src="images/enter_repeated_password_for_existing_user.png">
 
-# (17) (19) If new user or existing user with new password, save BCryptPasswordEncoded Password to MySQL
+## (17) (19) If new user or existing user with new password, save BCryptPasswordEncoded Password to MySQL
 
 ##   
 
