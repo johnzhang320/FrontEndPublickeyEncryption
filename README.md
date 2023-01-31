@@ -1,4 +1,4 @@
-## Use Frontend Public Key to encrypt Password, Bank Account # and Social Security
+# Use Frontend Public Key to encrypt Password, Bank Account # and Social Security
 ### Introduce an Useful Signup Code Implementation and Demo 
 ## Overview
 
@@ -67,11 +67,12 @@
    
    Any Browser
    
-   ### Especially ensure to setup Intellij Project Structure to JDK 1.8 for key generator
+   Especially ensure to setup Intellij Project Structure to JDK 1.8 for key generator
   
 
 # Dependencies
-### Major Dependencies
+
+## Major Dependencies description
     
     org.bouncycastle.bcprov-jdk16.1.45  --- Generates Public Key Pair, Private Key Pair, descrypts FEPKEed data to plain text
     
@@ -151,13 +152,13 @@
    ...
 
    
-# Workflow Chart
+# Workflow Diagram
 
   ![](images/FrontEndPublicKeyEncryptionDetail.jpg)
   
-  ## Based on the sequence No. (1), (2),(3).....(21) of each arrows in workflow chart, we will explain function with description, the code and demo
+  ## We will explain each workflow arrow's function with sequence No. (1), (2),(3).....(21) by description, code and demo
   
-  
+ 
   
   # (1) - Signup Request 
      
@@ -199,7 +200,7 @@
       
       
   
-  # (2) Spring MVC Controller get such request, load signup page:
+  # (2) Spring MVC Controller accept GET request and load signup page:
    
  ...
  
@@ -222,8 +223,8 @@
 
 # (3) Before Load JSP HTML context, send Public Key request
    
-   stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html") send public key request to keypairManager via Rest API
-   see line 16 as below code
+   stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html") send public key request to 
+   keypairManager via Rest API see line 16 as below code
    
    <img src="images/frontend_publickey_encrption_jsp.png" width="60%" height="70%">
    
@@ -233,7 +234,7 @@
    
    <img src="images/StringCryptionJS.png" width="60%" height="70%">
   
-# (4) KeyPairManager generates Public Key pair (e,n) and model and Private Key pair
+# (4) KeyPairManager generates Public Key pair (e,n) and Private Key pair(d,n)
 
   ...
 
@@ -304,31 +305,33 @@
   
   
    
-  ### (5) Here is an sample to explain Public Key RSA Cryptography 
+  ### (5) An sample to explain Public Key RSA Cryptography 
   
   <img src="images/RSA_Cryptography.png" width="60%" height="80%">
 
-  In above diagram, (e,n) is public key pair and (d,n) is private key pair, M is plainText, public key encrypt is C=(M^e) mod n , 
-  private key decrypt is D = (C^d) mod n.  
+  In above diagram, (e,n) is public key pair and (d,n) is private key pair, M is plainText, public key 
+  encrypt is C=(M^e) mod n , private key decrypt is D = (C^d) mod n.  
   
-  /FrontEndPublicKeyEncryption/getKeyPair.html will return (e,n) in asscii character format, this URL is synchronized request
+  /FrontEndPublicKeyEncryption/getKeyPair.html will return (e,n) in asscii character format, this URL is 
+  synchronized request
      
-## (6) Register Password, Bank A/c and Social Security as Frontend Public Key Encrypting (FEPKE) fields
+## (6) Register Password, Bank A/c and Social Security 
       
   	 	stringCryption.initialize("password"); 		  
 		stringCryption.initialize("creditNumber"); 		  
 		stringCryption.initialize("socialSecurity");
 		
-    I made stringCryption.js as an interface between JSP and Javascript public key encryption library: jquery.jcryption-1.1.js,
-    I also made some synchronize ajax call in this library.
+    I made stringCryption.js as an interface between JSP and Javascript public key encryption library: 
+    jquery.jcryption-1.1.js, I also made some synchronize ajax call in this library.
     
     
-## (7) Spring MVC return the signup page to user as followig empty page which let user enter data
+## (7) Spring MVC return empty signup page and let user enter data
 
    <img src="images/signup_empty_page_for_dto.png" width="50%" height="50%">
    
-    We call loan agent sigup page, therefore we create AgentTableDto to accept user entered data and cipherText data encrypted by 
-    Javascript as following code and also do server side data validation, especially password
+    We call loan agent sigup page, therefore we create AgentTableDto to accept user entered data and 
+    cipherText data encrypted by Javascript as following code and also do server side data validation, 
+    especially password
    
 ...
 
@@ -377,14 +380,149 @@
   
  <img src="images/enter_password_not_finish_yet.png" width="50%" height="50%">
  
-## Once the user finished entering password and cursor is leave password field, the encrypt ciphertext be show
+# (9) Key Blur Event be triggered
+# (10) Javascript sends the password to jquery.jCryption.1.1.js to encrypt at frontend
+# (11) JSP display the ciper text password to User
+  (9) - (11) working result is:
+  Once the user finished entering password and cursor is leave password field, the encrypt ciphertext be show
 
-  <img src="images/enter_password_done_and_cursor_leave.png" width="50%" height="50%"> 
-   
- 
- <img src="images/signup_enter_data_finish_ready_submit_agent_header.png" width="50%" height="50%">
+  <img src="images/enter_password_done_and_cursor_leave.png" width="50%" height="50%">
 
-# (9) 
+
+# (12) Entered all signup data and ready to submit, signup page looks like: 
+
+  Now bank account and social security fields contain cipher text data too.
+  
+  <img src="images/signup_enter_data_finish_ready_submit_agent_header.png" width="50%" height="50%">
+  
+  Once user press "Submit' button, submitted data will be send to Spring MVC Controller by issuing form
+  POST request
+  
+# (13) Spring MVC controller accept a POST request to following works
+       
+       check the validation error in BindResult, the @Valid annotation check the AgentTableDto vailidation
+       condition such as @NotBlank
+       @Emaul etc, once find any DTO validation Error , return modelAndViewError, wbich go back to original 
+        sign up page which  ModelAndView("FrontEndCryptionDemo") specified
+       
+       
+...
+
+	@RequestMapping(value="/frontEndCryptionDemo.html",method = RequestMethod.POST)
+	public ModelAndView processSubmit(
+			@Valid @ModelAttribute("agentTableRequestDto") AgentTableDto agentTableRequestDto,
+			BindingResult bindingResult,
+			HttpServletRequest request
+		)	throws Exception { 
+		
+		log.info("FrontEndCryptionDemoController prcessSubmit() begin");
+		ModelAndView modelAndViewError =new ModelAndView("FrontEndCryptionDemo");
+		ModelAndView modelAndViewDemo =new ModelAndView("redirect:frontEndCryptionDemoSubmitSuccess.html");
+
+		if (bindingResult.hasErrors()) {
+			return modelAndViewError;
+		} else {
+
+...
+       
+       
+#  (14)  Mapper DTO to Model and Decrypt the data  
+       
+         
+...
+
+	                /**
+			 *  DTO Object -> Entity Object using ModelMapper
+			 *  save a lot of boilerplate code
+			 */
+			AgentTable agentTableDao = modelMapper.map(agentTableRequestDto,AgentTable.class);
+			AgentTableDemoDto agentTableDemoDto = modelMapper.map(agentTableRequestDto, AgentTableDemoDto.class);
+
+			/**
+			 *   Encrypt password , credit card number and social security number
+			 *   by javascript code which sent to agentTableRequestDto
+			 */
+			String encryptedPassword =agentTableRequestDto.getPassword();
+			String encryptedCreditCardNumber = agentTableRequestDto.getCreditNumber();
+			String encryptedSocialSecurityNumber = agentTableRequestDto.getSocialSecurity();
+			/**
+			 *  Decrypt password , credit card number and social security number
+			 *  by fepkeDecrpt method
+			 */
+			String passwordPlanText = encoderService.fepkeDecrpt(encryptedPassword);
+			String creditCardNumberPlanText =  encoderService.fepkeDecrpt(encryptedCreditCardNumber);
+			String socialSecurityNumberPlanText = encoderService.fepkeDecrpt(encryptedSocialSecurityNumber);
+
+...
+
+
+
+# (15) Call AgentTableService to validate password deeply
+
+## agentTableService.validatPasswordReturnExistAgentTable
+   If validation failed , this service method will throw PasswordException, Spring MVC controller catch this exception 
+   bindingResult.addError will be added exception message into BindResult.error, then go back to original signup page, 
+   the Single Page Action(SPA) will handle error.
+   Using this way we do not need @HandleException, @ControllerAdivce to handle exception and redirect error to different 
+   error page
+
+...
+
+                    try {
+				existAgentTable = agentTableService.validatPasswordReturnExistAgentTable(
+				          agentTableRequestDto.getUserName(),
+					  passwordPlanText);
+
+			} catch (PasswordException ex) {
+				bindingResult.addError(new FieldError("AgentTableRequestDto", "password",
+						ex.getMessage()));
+				return modelAndViewError;
+			}
+...
+
+# (15) (16) check exist user and same user using repeated password by agentTableService, it does following works
+## This is reason why we use BCryptPasswordEncoder.matches
+
+    Verify if password length is 8 ~15 chars and then using BCryptPasswordEncoder.matches
+    (plainText,bcryptString to validate if entered password matches saved bcrypted password
+    to see if people entered same password for same user, if validation is passed , return
+    exist entity to get primary key agentId, if it is invalided, handling bindingResult to
+    ensure error message occurs in same signup webpage
+...
+@Slf4j
+@Service
+public class AgentTableService {
+    @Autowired
+    AgentTableRepository agentTableRepository;
+
+    @Autowired
+    EncoderService encoderService;
+
+    public AgentTable validatPasswordReturnExistAgentTable(
+            String username, String passwordPlainText) throws PasswordException {
+
+        if (passwordPlainText.length()<8 || passwordPlainText.length()>15) {
+            throw new PasswordException("PasswordSize required 8 - 15 characters");
+        }
+
+        Optional<AgentTable> existAgentTableOpt = agentTableRepository.findAgentTableByUserName(username);
+
+        AgentTable existAgentTable = null;
+        if (existAgentTableOpt.isPresent()) {
+            existAgentTable = existAgentTableOpt.get();
+            String savedBcryptedpassword = existAgentTable.getPassword();
+            boolean checkResult = encoderService.checkPasswordExist(passwordPlainText, savedBcryptedpassword);
+            if (checkResult) {
+                throw new PasswordException("Password: "+passwordPlainText+" exists for user: "+username);
+            }
+        }
+        return existAgentTable;
+    }
+}
+
+...
+##   
+
 ## Getting Started
 
 ### Dependencies
