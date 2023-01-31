@@ -76,12 +76,13 @@
 
 ## Major Dependencies description
     
-    org.bouncycastle.bcprov-jdk16.1.45  --- Generates Public Key Pair, Private Key Pair, descrypts FEPKEed data to plain text
+    org.bouncycastle.bcprov-jdk16.1.45  --- Generates Public Key Pair, Private Key Pair, descrypts FEPKEed data 
+    to plain text
     
     Spring boot 2.1.3
     Spring boot Web                     --- Spring MVC for Demo 
     org.apache.tile.tiles-jsp.3.0.5     --- Support view header, menu, body and footer
-    Spring boot Security                --- Apply BCryptPasswordEncoder for password saving and password validation
+    Spring boot Security                --- Apply BCryptPasswordEncoder for password saving and password  validation
     Spring boot JPA Data / MySQL        --- Signup data Model database access
     
     org.modelmapper.2.3.5               --- Model To Dto or Dto to Model conversion
