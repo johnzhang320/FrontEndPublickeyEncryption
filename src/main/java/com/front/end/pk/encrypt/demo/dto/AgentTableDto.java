@@ -15,7 +15,7 @@ import javax.validation.constraints.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
+@Data
  public class AgentTableDto {
 
 	@NotBlank(message = "Username is required")
