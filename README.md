@@ -372,9 +372,9 @@
  
  
     
-  Create JPA Model class AgentTable to access MySQL database (see source code)
+  Create JPA Model class AgentTable to access MySQL database (see full source code from download)
   
-  
+  <img src="images/AgentTable_Model.png"  width="60%" height="60%">
   
   application.properties configure MySQL 
   # spring.jpa.hibernate.ddl-auto = create if first time run this code
@@ -546,6 +546,12 @@ logging.level.org.hibernate.type=INFO
  }
 
 ...
+
+# Here is existing user entered repeated password, signup page alert 
+
+##  This is proof for FEPKE algorithm not only encript password at frontend but also verify if entered password valid !!
+
+  <img src="images/enter_repeated_password_for_existing_user.png">
 
 # (17) (19) If new user or existing user with new password, save BCryptPasswordEncoded Password to MySQL
 
