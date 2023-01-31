@@ -16,13 +16,9 @@ import java.sql.Timestamp;
  * Agents entity. @author MyEclipse Persistence Tools
  */
 @Data
-
 @AllArgsConstructor
-
 @NoArgsConstructor
-
 @Builder
-
 public class AgentTableDemoDto implements java.io.Serializable {
 
 	private Boolean passwordMatched;
