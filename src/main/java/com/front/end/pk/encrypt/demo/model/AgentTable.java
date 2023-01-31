@@ -20,18 +20,20 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+ @Data
+ @AllArgsConstructor
+ @NoArgsConstructor
+ @Builder
 /**
  * AgentTable entity. @author MyEclipse Persistence Tools
  */
-@Entity
-@Table(name = "agent_table", catalog = "agentdb", uniqueConstraints = {
+  @Entity
+  @Table(name = "agent_table", catalog = "agentdb", uniqueConstraints = {
 		@UniqueConstraint(columnNames = "email_address"),
 		@UniqueConstraint(columnNames = "user_name") })
-public class AgentTable implements java.io.Serializable {
+
+  public class AgentTable implements java.io.Serializable {
+
 	private static final long serialVersionUID=01L;
 	// Fields
 	@GenericGenerator(name = "generator", strategy = "increment")
@@ -39,14 +41,19 @@ public class AgentTable implements java.io.Serializable {
 	@GeneratedValue(generator = "generator")
 	@Column(name = "agentId", unique = true, nullable = false)
 	private Integer agentId;
+
 	@Column(name = "user_name", unique = true, nullable = false)
 	private String userName;
+
 	@Column(name = "password", nullable = false)
 	private String password;
+
 	@Column(name = "email_address", unique = true)
 	private String emailAddress;
+
 	@Column(name = "credit_number", unique = true)
 	private String creditNumber;
+
 	@Column(name = "credit_holder_name")
 	private String cardHolderName;
 
@@ -56,7 +63,8 @@ public class AgentTable implements java.io.Serializable {
 
 	@Column(name = "social_security", unique = true)
 	private String socialSecurity;
+
 	@Column(name = "full_name", unique = true)
 	private String fullName;
 
-}
+ }
