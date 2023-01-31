@@ -329,15 +329,62 @@
    
     We call loan agent sigup page, therefore we create AgentTableDto to accept user entered data and cipherText data encrypted by 
     Javascript as following code and also do server side data validation, especially password
-    
-     
-    <img src="images/AgentTableDto.png" width="60%" height="80%">
-    
-    Create JPA Model class AgentTable to access MySQL database
-    
-     <img src="images/AgentTable.png" width="60%" height="80%">
    
+...
 
+ public class AgentTableDto {
+
+	@NotBlank(message = "Username is required")
+	private String userName;
+	@NotBlank(message="password is required")
+	private String password;
+
+	@Email(message = "Email is invalid", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
+	private String emailAddress;
+	
+	@NotBlank(message="CreditNumber is required")
+	private String creditNumber;
+	
+	@NotBlank(message = "Credit Card Holder is required")
+	private String cardHolderName;
+	
+	@NotBlank(message = "Expired Date is required")
+	@DateTimeFormat(pattern = "mm/yy")
+	private String expiringDate;
+	
+	@NotBlank(message = "Security Code is required")
+	private String securityCode;
+	
+	@NotBlank(message = "Social Security Number is required")
+	private String socialSecurity;
+	@NotBlank(message = "SSO full name is required")
+	private String fullName;
+
+	private Boolean passwordMatched;
+
+	private String message;
+ }
+
+...
+ 
+ 
+    
+  Create JPA Model class AgentTable to access MySQL database (see source code)
+   
+# (8) User enters data include password, bank account and social security 
+
+## Below diagram show that the user type password and cursor is still in password field 
+  
+ <img src="images/enter_password_not_finish_yet.png" width="50%" height="50%">
+ 
+## Once the user finished entering password and cursor is leave password field, the encrypt ciphertext be show
+
+  <img src="images/enter_password_done_and_cursor_leave.png" width="50%" height="50%"> 
+   
+ 
+ <img src="images/signup_enter_data_finish_ready_submit_agent_header.png" width="50%" height="50%">
+
+# (9) 
 ## Getting Started
 
 ### Dependencies
