@@ -51,11 +51,11 @@
    In order to take advantage of BCryptPasswordEncoder, We can not SHA256 ot MD5 hash passwords in UI and use public key 
    to solve this problem.
    
- <img src="images/JQuery_Cacatenated_Element_Val.png">   
+
    
 # Project Structure   
    
-   <img src="images/project_structure.png" width="40%" height="40%">
+  <img src="images/project_structure.png" width="40%" height="40%">
    
 # Running Environment and Development Tools 
 
@@ -70,31 +70,30 @@
    Any Browser
    
    Especially ensure to setup Intellij Project Structure to JDK 1.8 for key generator
-  
+   
+![]("images/JQuery_Cacatenated_ElementId_Val.png")    
 
 # Dependencies
 
 ## Major Dependencies description
     
-    org.bouncycastle.bcprov-jdk16.1.45  --- Generates Public Key Pair, Private Key Pair, descrypts FEPKEed data 
-    to plain text
+  org.bouncycastle.bcprov-jdk16.1.45  --- Generates Public Key Pair, Private Key Pair, descrypts FEPKEed data 
+  to plain text
     
-    Spring boot 2.1.3
-    Spring boot Web                     --- Spring MVC for Demo 
-    org.apache.tile.tiles-jsp.3.0.5     --- Support view header, menu, body and footer
-    Spring boot Security                --- Apply BCryptPasswordEncoder for password saving and password  validation
-    Spring boot JPA Data / MySQL        --- Signup data Model database access
+  Spring boot 2.1.3
+  Spring boot Web                     --- Spring MVC for Demo 
+  org.apache.tile.tiles-jsp.3.0.5     --- Support view header, menu, body and footer
+  Spring boot Security                --- Apply BCryptPasswordEncoder for password saving and password  validation
+  Spring boot JPA Data / MySQL        --- Signup data Model database access
     
-    org.modelmapper.2.3.5               --- Model To Dto or Dto to Model conversion
+  org.modelmapper.2.3.5               --- Model To Dto or Dto to Model conversion
     
-    org.projectlombok                   
+  org.projectlombok                   
     
     
    
   ...  
-  
-       ..................
-  
+   
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -146,9 +145,7 @@
 			<artifactId>tiles-jsp</artifactId>
 			<version>3.0.5</version>
 		</dependency>
-
-
-		.......
+ 
 
 	</dependencies>
    
@@ -163,20 +160,20 @@
   
  
   
-  ## (1) - Signup Request 
+## (1) Signup Request 
      
-      http://localhost:8080/FrontEndPublicKeyEncryption/signup
+  http://localhost:8080/FrontEndPublicKeyEncryption/signup
       
-      FrontEndPublicKeyEncryption is defined as contextPath in application.properties
+  FrontEndPublicKeyEncryption is defined as contextPath in application.properties
       
-      server.servlet.contextPath=/FrontEndPublicKeyEncryption
+  server.servlet.contextPath=/FrontEndPublicKeyEncryption
       
-      If apply Spring Security, run any web page popout its default login page, before Spring Boot 2.7.8, we can use 
-      WebSecurityConfigurerAdapter disable default login page and allow /signup and /getKeypair.html to work without 
-      authentication 
+  If apply Spring Security, run any web page popout its default login page, before Spring Boot 2.7.8, we can use 
+  WebSecurityConfigurerAdapter disable default login page and allow /signup and /getKeypair.html to work without 
+  authentication 
       
       
-      ...
+ ...
         
      @EnableWebSecurity
      @Configuration
@@ -198,14 +195,14 @@
      }
 
       
-      ...
+ ...
       
       
       
   
-  ## (2) Spring MVC Controller accept GET request and load signup page:
+## (2) Spring MVC Controller accept GET request and load signup page:
    
- ...
+...
  
    	@RequestMapping(value="/signup",method = RequestMethod.GET)
 	public ModelAndView signupForm(ModelAndView modelAndView)
@@ -224,16 +221,34 @@
   Here FrontEndCryptionDemo is Signup page handler points signup definition in tiles.xml, signup page body 
   code is FrontEndCryptionDemo.jsp, coming along with header.jsp and footer.jsp (see code source)
 
- ## (3) Before Load JSP HTML context, send Public Key request
+## (3) Before Load JSP HTML context, send Public Key request
    
-   stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html") send public key request to 
-   keypairManager via Rest API see line 16 as below code
+  stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html") send public key request to 
+  keypairManager via Rest API see line 16 as below code
    
-   <img src="images/frontend_publickey_encrption_jsp.png" width="60%" height="70%">
+  <img src="images/frontend_publickey_encrption_jsp.png" width="60%" height="70%">
    
-   StringCryption.js is interface between front end public key encryption library and view layer (jsp)
-   Talk it later in "Secure Consideration of Javascript" section
+  StringCryption.js is interface between front end public key encryption library and view layer (jsp)
+  see "Secure Consideration of Javascript" section
 
+##  Secure Consideration of Javascript
+    
+   We use fronten Public Key to encrypt sensitive data, maybe people ask when the pass sensitive data to 
+   encrypt method into the library, we need variable to contain the data, using Chrome Inspect->Source or
+   other debug way we can easily find sensitive data like password from that variable
+    
+   Thanks for JQuery provides $(ElementId).val() method, we can hide data from Javascript debug. We have
+   piece of code StringCryption.js for key bur event, especially we separate elementId literal string variable 
+   and id representive symbol "#" and cacatenated together $("#"+elementId).val() , elementId variable may
+   contain "password" , "banckAccountNo" etc
+    
+   Following is that under Chrome, we only can see "password" from element and val() show nothing about password
+    
+   <img src="images/RSA_Cryptography.png" width="60%" height="80%">
+    
+   Following is what change I made in Jquery.jCryption-1.1.js
+    
+   <img src="images/JQuery_Encrypt_Cacatenated_Element_Val.png" width="50%" height="50%">
  
   
 ## (4) KeyPairManager generates Public Key pair (e,n) and Private Key pair(d,n)
@@ -306,10 +321,7 @@
   ...
   
    
-  ## (5) An sample to explain Public Key RSA Cryptography 
-  
-  <img src="images/RSA_Cryptography.png" width="60%" height="80%">
-
+## (5) An sample to explain Public Key RSA Cryptography 
   In above diagram, (e,n) is public key pair and (d,n) is private key pair, M is plainText, public key 
   encrypt is C=(M^e) mod n , private key decrypt is D = (C^d) mod n.  
   
@@ -322,27 +334,13 @@
 		stringCryption.initialize("creditNumber"); 		  
 		stringCryption.initialize("socialSecurity");
 		
-    I made stringCryption.js as an interface between JSP and Javascript public key encryption library: 
-    jquery.jcryption-1.1.js, I also made some secure change this library.
+  I made stringCryption.js as an interface between JSP and Javascript public key encryption library: 
+  jquery.jcryption-1.1.js, I also made some secure change this library.
     
-# Secure Consideration of Javascript
     
-    We use fronten Public Key to encrypt sensitive data, maybe people ask when the pass sensitive data to 
-    encrypt method into the library, we need variable to contain the data, using Chrome Inspect->Source or
-    other debug way we can easily find sensitive data like password from that variable
-    
-    Thanks for JQuery provides $(ElementId).val() method, we can hide data from Javascript debug. We have
-    piece of code StringCryption.js for key bur event, especially we separate elementId literal string variable 
-    and id representive symbol "#" and cacatenated together $("#"+elementId).val() , elementId variable may
-    contain "password" , "banckAccountNo" etc
-    
-    Following is that under Chrome, we only can see "password" from element and val() show nothing about password
-    
-    <img src="images/JQuery_Cacatenated_Element_Val.png">
-    
-    Following is what change I made in Jquery.jCryption-1.1.js
-    
-    <img src="images/JQuery_Encrypt_Cacatenated_Element_Val.png" width="50%" height="50%">
+
+
+
     
     
     
@@ -366,7 +364,7 @@
 ...
     
     
-    Inside of literal class stringCryption_ , we have encrypt method to call the library
+ Inside of literal class stringCryption_ , we have encrypt method to call the library
 ...
 	  encrypt: function(elementId) {
 		  if (stringCryption_.isBlank(publicKey)) {
@@ -398,9 +396,9 @@
 
    <img src="images/signup_empty_page_for_dto.png" width="50%" height="50%">
    
-    We call loan agent sigup page, therefore we create AgentTableDto to accept user entered data and 
-    cipherText data encrypted by Javascript as following code and also do server side data validation, 
-    especially password
+  We call loan agent sigup page, therefore we create AgentTableDto to accept user entered data and 
+  cipherText data encrypted by Javascript as following code and also do server side data validation, 
+  especially password
    
 ...
 
@@ -441,23 +439,22 @@
  
  
     
-  Create JPA Model class AgentTable to access MySQL database (see full source code from download)
+ Create JPA Model class AgentTable to access MySQL database (see full source code from download)
   
   <img src="images/AgentTable_Model.png"  width="60%" height="60%">
   
-  application.properties configure MySQL 
-  ## spring.jpa.hibernate.ddl-auto = create if first time run this code
+ application.properties configure MySQL 
+ 
+## spring.jpa.hibernate.ddl-auto = create if first time run this code
 ...
 
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.datasource.url = jdbc:mysql://localhost:3306/agentdb
 spring.datasource.username = root
 spring.datasource.password = mypassword
-
  
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
 
- 
 spring.jpa.hibernate.ddl-auto =update
 spring.jpa.generate-ddl=true
 spring.jpa.show-sql = true
