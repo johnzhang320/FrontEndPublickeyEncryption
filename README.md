@@ -51,7 +51,7 @@
    In order to take advantage of BCryptPasswordEncoder, We can not SHA256 ot MD5 hash passwords in UI and use public key 
    to solve this problem.
    
-
+ <img src="images/JQuery_Cacatenated_Element_Val.png">   
    
 # Project Structure   
    
@@ -232,14 +232,13 @@
    <img src="images/frontend_publickey_encrption_jsp.png" width="60%" height="70%">
    
    StringCryption.js is interface between front end public key encryption library and view layer (jsp)
-   
-   We can find line 42 is method getKeyPair and line 51 is method public key encrypt in javascript literal class
-   
-   <img src="images/StringCryptionJS.png" width="60%" height="70%">
+   Talk it later in "Secure Consideration of Javascript" section
+
+ 
   
 ## (4) KeyPairManager generates Public Key pair (e,n) and Private Key pair(d,n)
 
-  ...
+...
 
      package com.front.end.pk.encrypt.demo.fepke_api;
 
@@ -306,7 +305,6 @@
   
   ...
   
-  
    
   ## (5) An sample to explain Public Key RSA Cryptography 
   
@@ -327,7 +325,7 @@
     I made stringCryption.js as an interface between JSP and Javascript public key encryption library: 
     jquery.jcryption-1.1.js, I also made some secure change this library.
     
-#   Secure Consideration of Javascript
+# Secure Consideration of Javascript
     
     We use fronten Public Key to encrypt sensitive data, maybe people ask when the pass sensitive data to 
     encrypt method into the library, we need variable to contain the data, using Chrome Inspect->Source or
@@ -335,13 +333,16 @@
     
     Thanks for JQuery provides $(ElementId).val() method, we can hide data from Javascript debug. We have
     piece of code StringCryption.js for key bur event, especially we separate elementId literal string variable 
-    and id representive symbol "#" and cacatenated together 
+    and id representive symbol "#" and cacatenated together $("#"+elementId).val() , elementId variable may
+    contain "password" , "banckAccountNo" etc
     
-    $("#"+elementId).val() , elementId variable may contain "password" , "banckAccountNo" etc
+    Following is that under Chrome, we only can see "password" from element and val() show nothing about password
     
-    Chrome "inspect"->"source" can not see such sensitive data any more
+    <img src="images/JQuery_Cacatenated_Element_Val.png">
     
-    <img src="images/.png" width="50%" height="50%">
+    Following is what change I made in Jquery.jCryption-1.1.js
+    
+    <img src="images/JQuery_Encrypt_Cacatenated_Element_Val.png" width="50%" height="50%">
     
     
     
