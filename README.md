@@ -373,6 +373,31 @@
  
     
   Create JPA Model class AgentTable to access MySQL database (see source code)
+  
+  
+  
+  application.properties configure MySQL 
+  # spring.jpa.hibernate.ddl-auto = create if first time run this code
+...
+
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url = jdbc:mysql://localhost:3306/agentdb
+spring.datasource.username = root
+spring.datasource.password = mypassword
+
+ 
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+
+ 
+spring.jpa.hibernate.ddl-auto =update
+spring.jpa.generate-ddl=true
+spring.jpa.show-sql = true
+
+logging.level.org.hibernate.SQL=INFO
+logging.level.org.hibernate.type=INFO
+
+...
+  
    
 # (8) User enters data include password, bank account and social security 
 
@@ -457,7 +482,7 @@
 
 
 
-# (15) Call AgentTableService to validate password deeply
+# (15) (21) Call AgentTableService to validate password deeply
 
 ## agentTableService.validatPasswordReturnExistAgentTable
    If validation failed , this service method will throw PasswordException, Spring MVC controller catch this exception 
@@ -480,7 +505,7 @@
 			}
 ...
 
-# (15) (16) check exist user and same user using repeated password by agentTableService, it does following works
+# (15) (16) (18) (20) check exist user and same user using repeated password by agentTableService, it does following works
 ## This is reason why we use BCryptPasswordEncoder.matches
 
     Verify if password length is 8 ~15 chars and then using BCryptPasswordEncoder.matches
@@ -489,9 +514,9 @@
     exist entity to get primary key agentId, if it is invalided, handling bindingResult to
     ensure error message occurs in same signup webpage
 ...
-@Slf4j
-@Service
-public class AgentTableService {
+ @Slf4j
+ @Service
+ public class AgentTableService {
     @Autowired
     AgentTableRepository agentTableRepository;
 
@@ -517,10 +542,13 @@ public class AgentTableService {
             }
         }
         return existAgentTable;
-    }
-}
+     }
+ }
 
 ...
+
+# (17) (19) If new user or existing user with new password, save BCryptPasswordEncoded Password to MySQL
+
 ##   
 
 ## Getting Started
