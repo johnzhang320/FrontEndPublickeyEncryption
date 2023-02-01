@@ -55,7 +55,7 @@
    
 # Project Structure   
    
-  <img src="images/project_structure.png" width="40%" height="40%">
+   <img src="images/project_structure.png" width="40%" height="40%">
    
 # Running Environment and Development Tools 
 
@@ -70,30 +70,31 @@
    Any Browser
    
    Especially ensure to setup Intellij Project Structure to JDK 1.8 for key generator
-   
-![]("images/JQuery_Cacatenated_ElementId_Val.png")    
+  
 
 # Dependencies
 
 ## Major Dependencies description
+
     
-  org.bouncycastle.bcprov-jdk16.1.45  --- Generates Public Key Pair, Private Key Pair, descrypts FEPKEed data 
-  to plain text
+    org.bouncycastle.bcprov-jdk16.1.45  --- Generates Public Key Pair, Private Key Pair, descrypts FEPKEed data 
+    to plain text
     
-  Spring boot 2.1.3
-  Spring boot Web                     --- Spring MVC for Demo 
-  org.apache.tile.tiles-jsp.3.0.5     --- Support view header, menu, body and footer
-  Spring boot Security                --- Apply BCryptPasswordEncoder for password saving and password  validation
-  Spring boot JPA Data / MySQL        --- Signup data Model database access
+    Spring boot 2.1.3
+    Spring boot Web                     --- Spring MVC for Demo 
+    org.apache.tile.tiles-jsp.3.0.5     --- Support view header, menu, body and footer
+    Spring boot Security                --- Apply BCryptPasswordEncoder for password saving and password  validation
+    Spring boot JPA Data / MySQL        --- Signup data Model database access
     
-  org.modelmapper.2.3.5               --- Model To Dto or Dto to Model conversion
+    org.modelmapper.2.3.5               --- Model To Dto or Dto to Model conversion
     
-  org.projectlombok                   
+    org.projectlombok                   
     
     
-   
-  ...  
-   
+...  
+  
+       ..................
+  
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -145,11 +146,13 @@
 			<artifactId>tiles-jsp</artifactId>
 			<version>3.0.5</version>
 		</dependency>
- 
+
+
+		.......
 
 	</dependencies>
    
-   ...
+...
 
    
 # Workflow Diagram
@@ -160,20 +163,21 @@
   
  
   
-## (1) Signup Request 
+  ## (1) Signup Request 
      
-  http://localhost:8080/FrontEndPublicKeyEncryption/signup
+     
+     http://localhost:8080/FrontEndPublicKeyEncryption/signup
       
-  FrontEndPublicKeyEncryption is defined as contextPath in application.properties
+     FrontEndPublicKeyEncryption is defined as contextPath in application.properties
       
-  server.servlet.contextPath=/FrontEndPublicKeyEncryption
+     server.servlet.contextPath=/FrontEndPublicKeyEncryption
       
-  If apply Spring Security, run any web page popout its default login page, before Spring Boot 2.7.8, we can use 
-  WebSecurityConfigurerAdapter disable default login page and allow /signup and /getKeypair.html to work without 
-  authentication 
+     If apply Spring Security, run any web page popout its default login page, before Spring Boot 2.7.8, we can use 
+     WebSecurityConfigurerAdapter disable default login page and allow /signup and /getKeypair.html to work without 
+     authentication 
       
       
- ...
+...
         
      @EnableWebSecurity
      @Configuration
@@ -195,12 +199,12 @@
      }
 
       
- ...
+...
       
       
       
   
-## (2) Spring MVC Controller accept GET request and load signup page:
+  ## (2) Spring MVC Controller load signup page:
    
 ...
  
@@ -215,41 +219,212 @@
 		return modelAndView;
 	}
 	
- ...
- 
+...
+
+
+  jsp signup page as following:
+  
+...
+
+    <!-- Front End Encryption library -->
+    <script type="text/javascript" src="js/lib/jquery-1.8.0.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.jcryption-1.1.js"></script> 
+
+    <!-- Front End Encryption Customized Code -->
+    <script type="text/javascript"	src="js/utils/stringCryption.js">		
+    </script>
+    <script type="text/javascript"> 
+	$(document).ready(function(){
+		stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html")
+	 	stringCryption.initialize("password"); 		  
+		stringCryption.initialize("creditNumber"); 		  
+		stringCryption.initialize("socialSecurity");
+	}); 
+    </script>  
+    ........
+
+    <form:form method="POST" name="agentTable" action="frontEndCryptionDemo.html"
+                                           modelAttribute="agentTableRequestDto" >
+    <fieldset>
+	<legend>
+	        <form:errors path="*" cssClass="errorblock" />
+	        <span class="AccountCreateTableHeader">
+                <spring:message code="title.password.encrypt"/></span>
+	</legend><br>
+    	       <label style="margin-left: -100px;"  id="usenNameLabel">	
+	        <font color="red">*</font>
+    	        <spring:message code="label.username"/></label>
+    	        <form:input path="userName" size="100"  maxlength="250" cssClass="large" />
+    	        <form:errors path="userName" cssClass="errorMsg" /><br>
+
+	        <label style="margin-left: -100px;"  id="emailAddressAddressLabel">	
+                <font color="red">*</font>     				 
+	        <spring:message code="label.email.address"/></label>
+	        <form:input path="emailAddress" size="180"  maxlength="250" cssClass="large" />   
+	        <form:errors path="emailAddress" cssClass="errorMsg" /> 
+	        <br>
+	
+	        <label style="margin-left: -100px;"  id="passwordLabel">		      		 
+	        <font color="red">*</font><spring:message code="label.password"/></label>
+	        <form:password path="password"  size="100"  maxlength="450" cssClass="large" />
+	        <form:errors path="password" cssClass="errorMsg" /> 
+	        <br><br>	
+    </fieldset>	
+    <fieldset>
+	<legend>
+	    <span class="AccountCreateTableHeader"><spring:message code="title.creditcard.encrypt"/></span>			 
+	</legend>	
+	    <label style="margin-left: -100px;"  id="label.credit.number">	
+	        <font color="red">*</font>     				 
+	        <spring:message code="label.credit.number"/></label>
+	        <form:input path="creditNumber" size="180"  maxlength="450" cssClass="large" />   
+	        <form:errors path="creditNumber" cssClass="errorMsg" /> 
+	    <br>
+	    <label style="margin-left: -100px;" id="cardHolderName">					 
+		<spring:message code="label.card.holder.name"/></label>
+		<form:input path="cardHolderName" size="180"  maxlength="450" />                       	 
+		<form:errors path="cardHolderName" cssClass="errorMsg"  />       
+		<br>
+		<label style="margin-left: -100px;" id="expiringDate">				 
+		<spring:message code="label.expiring.date"/></label>
+		<form:input path="expiringDate" size="180"  maxlength="450"  />                       	 
+		<form:errors path="expiringDate" cssClass="errorMsg"  />       
+		<br>
+		<label style="margin-left: -100px;" id="securityCode"> 		 
+		<spring:message code="label.security.code"/></label>
+		<form:input path="securityCode" size="180"  maxlength="450" />                       	 
+		<form:errors path="securityCode" cssClass="errorMsg"  />       
+		<br>				
+    </fieldset>
+    <fieldset>
+	<legend>
+	    <span class="AccountCreateTableHeader"><spring:message code="title.socialsecurity.encrypt"/></span>			 
+	</legend>	
+	        <label style="margin-left: -100px;"  id="social.security.number">		      		 
+	        <font color="red">*</font><spring:message code="social.security.number"/></label>
+	        <form:input path="socialSecurity"  size="180"  maxlength="450" cssClass="large" /> 
+	        <form:errors path="socialSecurity" cssClass="errorMsg" /> <br/>
+	        <label style="margin-left: -100px;" id="fullName">				 
+	        <spring:message code="label.full.name"/></label>
+	        <form:input path="fullName" size="180"  maxlength="450" />                       	 
+	        <form:errors path="fullName" cssClass="errorMsg"  />       
+	        <br>
+	        <label style="margin-left: -120px;" id="passwordLabel">&nbsp;	</label> 
+	        <input type="button" value="Submit" class="buttonLeft" onClick="javascript:loginSubmitForm();">
+        <!-- You can choose either display encrypted string or not display-->			             
+	        <br> <textArea id="showEncryptedString" rows="5" style="width:600px;display:none;" >			                 
+	        </textArea>         
+	        <br>
+	        <br>	
+    </form:form>
+
+
+    <fieldset>
+	<legend>
+	 <span style="color:whilte">Front End Public Key Encryption Flow</span> 
+	</legend>
+  
+     
+        <img src="images/FrontEndPublicKeyEncryptionConcept.jpg" style="max-width:100%;max-height:100%">   
+    </fieldset>
+
+
+...
+
   
   Here FrontEndCryptionDemo is Signup page handler points signup definition in tiles.xml, signup page body 
   code is FrontEndCryptionDemo.jsp, coming along with header.jsp and footer.jsp (see code source)
 
-## (3) Before Load JSP HTML context, send Public Key request
-   
-  stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html") send public key request to 
-  keypairManager via Rest API see line 16 as below code
-   
-  <img src="images/frontend_publickey_encrption_jsp.png" width="60%" height="70%">
-   
-  StringCryption.js is interface between front end public key encryption library and view layer (jsp)
-  see "Secure Consideration of Javascript" section
-
-##  Secure Consideration of Javascript
-    
-   We use fronten Public Key to encrypt sensitive data, maybe people ask when the pass sensitive data to 
-   encrypt method into the library, we need variable to contain the data, using Chrome Inspect->Source or
-   other debug way we can easily find sensitive data like password from that variable
-    
-   Thanks for JQuery provides $(ElementId).val() method, we can hide data from Javascript debug. We have
-   piece of code StringCryption.js for key bur event, especially we separate elementId literal string variable 
-   and id representive symbol "#" and cacatenated together $("#"+elementId).val() , elementId variable may
-   contain "password" , "banckAccountNo" etc
-    
-   Following is that under Chrome, we only can see "password" from element and val() show nothing about password
-    
-   <img src="images/RSA_Cryptography.png" width="60%" height="80%">
-    
-   Following is what change I made in Jquery.jCryption-1.1.js
-    
-   <img src="images/JQuery_Encrypt_Cacatenated_Element_Val.png" width="50%" height="50%">
+ ## (3) Load stringCryption.js by JSP, (5) request public key , (6) register sensitive data
  
+   from FrontEndCryptionDemo.jsp we can see we load and run stringCryption.js, this is my interface code
+   at this stage it finished: 
+   
+   send request to Rest API to call KeyPairManager to get public key by the method:
+   stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html")  
+   
+   Then it uses initialize() method to register sensitive data for further key blue event as following:
+   
+        stringCryption.initialize("password"); 		  
+	stringCryption.initialize("creditNumber"); 		  
+	stringCryption.initialize("socialSecurity");
+ 
+   stringCryption.js is interface between front end public key encryption library and view layer (jsp) 
+   this code as following:  
+    
+...
+
+    (function() {
+     // private variables
+  
+     SHOW_ENC_STRING_ID ="showEncryptedString";
+     publicKey = null;
+     encryptedString = null;
+  
+     // Internal Class
+     var stringCryption_ = {
+	  isBlank: function (str) {
+		 return (undefined==str || null==str|| !str || 0 === str.length || /^\s*$/.test(str) );
+	  },  
+	  getPublicKey: function(url) {  	
+		  // hold until server response
+		 URL = url;
+		  $.jCryption.getPublicKey(url,function(receivedKeys) {  
+		      	publicKey = receivedKeys;  		            
+		   });  
+		   return publicKey;
+	  },
+	  
+	  encrypt: function(elementId) {
+		  if (stringCryption_.isBlank(publicKey)) {
+			  alert("Please call stringCryption.initialize() first or check if publicKey URL is correct, URL="+URL);
+			  return null;
+		  } 
+		  var value = document.getElementById(elementId).value;
+		  if (stringCryption_.isBlank(value)) {
+			  return null;
+		  }
+		  $.jCryption.encrypt(value, publicKey, function(encryptedValue) {                
+			  document.getElementById(elementId).value=encryptedValue;   
+			  var encDiv= document.getElementById(SHOW_ENC_STRING_ID);	         	
+         	  if (null!=encDiv) {
+         		  encDiv.style.display="block";
+         		  encDiv.innerHTML="Encrypted String:\n"+encryptedValue;
+         	  }
+			  encryptedString = encryptedValue;
+          });  
+		  return encryptedString;
+	  }, 
+	  initialize: function (encryptField) {
+		
+		 // stringCryption_.getPublicKey(); 
+		  /**
+		   *  Leave cursor from text box , then encrypts box string if it 's not blank immediately.
+		   *  Install blur event as soon as JSP or HTML load 
+		   */
+		  $("#"+encryptField).blur(function(){
+	          if(!stringCryption_.isBlank($(this).val()) ){
+	         	  var encString =stringCryption_.encrypt(encryptField);
+	           }  
+	       }); 
+		  /**
+		   *  Enter the encrypted box, remove encrypted string immediately
+		   */
+		  $("#"+encryptField).focus(function(){
+		        console.log($(this).val())
+		        $(this).val("");  
+		        var encDiv= document.getElementById(SHOW_ENC_STRING_ID);	         	
+	         	  if (null!=encDiv) {	         		   
+	         		  encDiv.style.display="none";	         		  
+	         	  }
+		  });   
+	     }
+     }; 
+
+...
+     
+   
+   
   
 ## (4) KeyPairManager generates Public Key pair (e,n) and Private Key pair(d,n)
 
@@ -318,91 +493,58 @@
     }
 
   
-  ...
+...
+  
   
    
-## (5) An sample to explain Public Key RSA Cryptography 
+  ## (5) An sample to explain Public Key RSA Cryptography 
+  
+  <img src="images/RSA_Cryptography.png" width="60%" height="80%">
+
   In above diagram, (e,n) is public key pair and (d,n) is private key pair, M is plainText, public key 
   encrypt is C=(M^e) mod n , private key decrypt is D = (C^d) mod n.  
   
   /FrontEndPublicKeyEncryption/getKeyPair.html will return (e,n) in asscii character format, this URL is 
   synchronized request
      
-## (6) Register Password, Bank A/c and Social Security 
-      
-  	 	stringCryption.initialize("password"); 		  
-		stringCryption.initialize("creditNumber"); 		  
-		stringCryption.initialize("socialSecurity");
-		
-  I made stringCryption.js as an interface between JSP and Javascript public key encryption library: 
-  jquery.jcryption-1.1.js, I also made some secure change this library.
-    
-    
-
-
 
     
+# Secure Consideration for javascript to encrypt sensitive data 
     
+ We use fronten Public Key to encrypt sensitive data, maybe people ask when the pass sensitive data to 
+ encrypt method into the library, we need variable to contain the data, using Chrome Inspect->Source or
+ other debug way we can easily find sensitive data like password from that variable
     
-     
+### Thanks for JQuery provides $(elementId).val() method!
+   With it , we can hide data from Javascript debug. We have piece of code StringCryption.js for key bur 
+   event, especially we separate elementId literal string variable and id representive symbol
+   "#" and cacatenated together 
     
+   $("#"+elementId).val() , elementId variable only contain Id name "password" , "banckAccountNo" instead 
+   of id's value
     
+   Chrome "inspect"->"source" can not see such sensitive data any more, HOVER either the 'elementId' or 
+   val() , debug can not find the value ! 
+    
+   <img src="images/JQuery_Cacatenated_ElementId_Val.png" width="70%" height="70%">
    
-...
-   var stringCryption_ = {   
-       ........
-     initialize: function (encryptField) {
-		
-      .......
-	 $("#"+encryptField).blur(function(){
-              if(!stringCryption_.isBlank($(this).val())) {
-	              var encString =stringCryption_.encrypt(encryptField);
-              }
-	 }); 
-	 
-    }
-...
+   I made changes in both stringCryption.js and Jquery.jCryption-1.1.js as following:
     
-    
- Inside of literal class stringCryption_ , we have encrypt method to call the library
-...
-	  encrypt: function(elementId) {
-		  if (stringCryption_.isBlank(publicKey)) {
-			  alert("Please call stringCryption.initialize() first or check if publicKey URL is correct, URL="+URL);
-			  return null;
-		  } 
-	      // no sensitive value variables can be seen by chrome infect or other javascript dev tool
-		  if (stringCryption_.isBlank($("#"+elementId).val())) {
-			  return null;
-		  }
-		  $.jCryption.secure_encrypt(elementId, publicKey, function(encryptedValue) {
-
-			 $("#"+elementId).val(encryptedValue);
-			  var encDiv= document.getElementById(SHOW_ENC_STRING_ID);	         	
-         	  if (null!=encDiv) {
-         		  encDiv.style.display="block";
-         		  encDiv.innerHTML="Encrypted String:\n"+encryptedValue;
-         	  }
-			  encryptedString = encryptedValue;
-          });  
-		  return encryptedString;
-   }, 
-...
+   <img src="images/JQuery_Encrypt_Cacatenated_Element_Val.png" width="70%" height="70%">
+   
  
-    
-    
     
 ## (7) Spring MVC return empty signup page and let user enter data
 
    <img src="images/signup_empty_page_for_dto.png" width="50%" height="50%">
    
-  We call loan agent sigup page, therefore we create AgentTableDto to accept user entered data and 
-  cipherText data encrypted by Javascript as following code and also do server side data validation, 
-  especially password
+   We call loan agent sigup page, therefore we create AgentTableDto to accept user entered data and 
+   cipherText data encrypted by Javascript as following code and also do server side data validation, 
+   especially password
    
 ...
 
- public class AgentTableDto {
+    public class AgentTableDto {
 
 	@NotBlank(message = "Username is required")
 	private String userName;
@@ -433,47 +575,41 @@
 	private Boolean passwordMatched;
 
 	private String message;
- }
+    }
 
 ...
- 
- 
     
- Create JPA Model class AgentTable to access MySQL database (see full source code from download)
+  Create JPA Model class AgentTable to access MySQL database (see full source code from download)
   
   <img src="images/AgentTable_Model.png"  width="60%" height="60%">
   
- application.properties configure MySQL 
- 
+  application.properties configure MySQL 
 ## spring.jpa.hibernate.ddl-auto = create if first time run this code
-...
 
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-spring.datasource.url = jdbc:mysql://localhost:3306/agentdb
-spring.datasource.username = root
-spring.datasource.password = mypassword
- 
-spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+  spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+  spring.datasource.url = jdbc:mysql://localhost:3306/agentdb
+  spring.datasource.username = root
+  spring.datasource.password = mypassword
+  spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
 
-spring.jpa.hibernate.ddl-auto =update
-spring.jpa.generate-ddl=true
-spring.jpa.show-sql = true
+### spring.jpa.hibernate.ddl-auto =update
+   spring.jpa.generate-ddl=true
+   spring.jpa.show-sql = true
 
-logging.level.org.hibernate.SQL=INFO
-logging.level.org.hibernate.type=INFO
-
-...
+   logging.level.org.hibernate.SQL=I NFO
+   logging.level.org.hibernate.type=INFO
   
    
 ## (8) User enters data include password, bank account and social security 
 
 ### Below diagram show that the user type password and cursor is still in password field 
   
- <img src="images/enter_password_not_finish_yet.png" width="50%" height="50%">
+    <img src="images/enter_password_not_finish_yet.png" width="50%" height="50%">
  
 ## (9) Key Blur Event be triggered
 ## (10) Javascript sends the password to jquery.jCryption.1.1.js to encrypt at frontend
 ## (11) JSP display the ciper text password to User
+
   (9) - (11) working result is:
   Once the user finished entering password and cursor is leave password field, the encrypt ciphertext be show
 
@@ -491,10 +627,10 @@ logging.level.org.hibernate.type=INFO
   
 ## (13) Spring MVC controller accept a POST request to following works
        
-       check the validation error in BindResult, the @Valid annotation check the AgentTableDto vailidation
-       condition such as @NotBlank
-       @Emaul etc, once find any DTO validation Error , return modelAndViewError, wbich go back to original 
-        sign up page which  ModelAndView("FrontEndCryptionDemo") specified
+  check the validation error in BindResult, the @Valid annotation check the AgentTableDto vailidation
+  condition such as @NotBlank
+  @Emaul etc, once find any DTO validation Error , return modelAndViewError, wbich go back to original 
+  sign up page which  ModelAndView("FrontEndCryptionDemo") specified
        
        
 ...
@@ -518,7 +654,7 @@ logging.level.org.hibernate.type=INFO
 ## Basic Validation based on DTO condition annatation and @Valid 
 
      
-     <img src="images/BasicVaildation.png" width="50%" height="50%">  
+  <img src="images/BasicVaildation.png" width="50%" height="50%">  
      
 ## (14)  Mapper DTO to Model and Decrypt the data  
        
@@ -554,48 +690,46 @@ logging.level.org.hibernate.type=INFO
 ## (15) (21) Call AgentTableService to validate password deeply
 
 ## agentTableService.validatPasswordReturnExistAgentTable
-   If validation failed , this service method will throw PasswordException, Spring MVC controller catch this exception 
-   bindingResult.addError will be added exception message into BindResult.error, then go back to original signup page, 
-   the Single Page Action(SPA) will handle error.
-   Using this way we do not need @HandleException, @ControllerAdivce to handle exception and redirect error to different 
-   error page
+  If validation failed , this service method will throw PasswordException, Spring MVC controller catch this exception 
+  bindingResult.addError will be added exception message into BindResult.error, then go back to original signup page, 
+  the Single Page Action(SPA) will handle error.
+  Using this way we do not need @HandleException, @ControllerAdivce to handle exception and redirect error to different 
+  error page
 
 ...
 
-                    try {
-				existAgentTable = agentTableService.validatPasswordReturnExistAgentTable(
-				          agentTableRequestDto.getUserName(),
-					  passwordPlanText);
-
-			} catch (PasswordException ex) {
-				bindingResult.addError(new FieldError("AgentTableRequestDto", "password",
-						ex.getMessage()));
-				return modelAndViewError;
-			}
+    try{
+          existAgentTable = agentTableService.validatPasswordReturnExistAgentTable(
+                            agentTableRequestDto.getUserName(),
+                            passwordPlanText);
+       } catch (PasswordException ex) {
+          bindingResult.addError(new FieldError("AgentTableRequestDto", "password",ex.getMessage()));
+		return modelAndViewError;
+      }
 ...
 
 ## (15) (16) (18) (20) check exist user and same user using repeated password by agentTableService, it does following works
 ## This is reason why we use BCryptPasswordEncoder.matches
 
-    Verify if password length is 8 ~15 chars and then using BCryptPasswordEncoder.matches
-    (plainText,bcryptString to validate if entered password matches saved bcrypted password
-    to see if people entered same password for same user, if validation is passed , return
-    exist entity to get primary key agentId, if it is invalided, handling bindingResult to
-    ensure error message occurs in same signup webpage
+  Verify if password length is 8 ~15 chars and then using BCryptPasswordEncoder.matches
+  (plainText,bcryptString to validate if entered password matches saved bcrypted password
+  to see if people entered same password for same user, if validation is passed , return
+  exist entity to get primary key agentId, if it is invalided, handling bindingResult to
+  ensure error message occurs in same signup webpage
 ...
- @Slf4j
- @Service
- public class AgentTableService {
-    @Autowired
-    AgentTableRepository agentTableRepository;
+    @Slf4j
+    @Service
+    public class AgentTableService {
+       @Autowired
+       AgentTableRepository agentTableRepository;
 
-    @Autowired
-    EncoderService encoderService;
+       @Autowired
+       EncoderService encoderService;
 
-    public AgentTable validatPasswordReturnExistAgentTable(
-            String username, String passwordPlainText) throws PasswordException {
+       public AgentTable validatPasswordReturnExistAgentTable(String username, String passwordPlainText)
+                         throws PasswordException {
 
-        if (passwordPlainText.length()<8 || passwordPlainText.length()>15) {
+       if (passwordPlainText.length()<8 || passwordPlainText.length()>15) {
             throw new PasswordException("PasswordSize required 8 - 15 characters");
         }
 
@@ -611,8 +745,8 @@ logging.level.org.hibernate.type=INFO
             }
         }
         return existAgentTable;
-     }
- }
+       }
+    }
 
 ...
 
@@ -626,31 +760,31 @@ logging.level.org.hibernate.type=INFO
 
 ...
 
-                        /**
-	                 *  if the record exists for this username, means this time update exist record
-			 */
-		       if (existAgentTable!=null) {
-				agentTableDao.setAgentId(existAgentTable.getAgentId());
-			}
-			/**
-			 * Save bcrypt encoded password to database by agentTableDao
-			 */
-			String bcryptedPassword= encoderService.bcryptEncodingPassword(passwordPlanText);
+    /**
+     *  if the record exists for this username, means this time update exist record
+     */
+        if (existAgentTable!=null) {
+                agentTableDao.setAgentId(existAgentTable.getAgentId());
+        }
+        /**
+         * Save bcrypt encoded password to database by agentTableDao
+         */
+        String bcryptedPassword= encoderService.bcryptEncodingPassword(passwordPlanText);
 
-			agentTableDao.setPassword(bcryptedPassword);
+        agentTableDao.setPassword(bcryptedPassword);
 
-			/**
-			 *  save creditCardNumberPlainText and socialSecurityNumberPlanText to database
-			 *  for further business use
-			 */
+        /**
+         *  save creditCardNumberPlainText and socialSecurityNumberPlanText to database
+         *  for further business use
+         */
 
-			agentTableDao.setCreditNumber(creditCardNumberPlanText);
-			agentTableDao.setSocialSecurity(socialSecurityNumberPlanText);
+        agentTableDao.setCreditNumber(creditCardNumberPlanText);
+        agentTableDao.setSocialSecurity(socialSecurityNumberPlanText);
 
-			/**
-			 *  save to database
-			 */
-			agentTableRepository.save(agentTableDao);
+        /**
+         *  save to database
+         */
+        agentTableRepository.save(agentTableDao);
 				
 
 ...
