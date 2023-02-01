@@ -926,9 +926,12 @@
  
  This solution uses javascript to encrypt password, bank account number and social secuirty number by dynamic public key
  in frontend and prevent hacker steal information from javascript
+ 
  Apply secure javascript code to hide sensitive to transfer argument
+ 
  Apply Spring boot 2.13, Spring Security, BCryptPasswordEncoder to save and verify password, solve univeral usage: existing
  user entered existing password, this logical can be apply signup and can be apply to login
+ 
  The purpose of this solution is compress the room or chance for invaded virus and hacker to steal sensitive data
 
 
