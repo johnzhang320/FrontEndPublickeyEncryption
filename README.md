@@ -345,9 +345,9 @@
    
    Then it uses initialize() method to register sensitive data for further key blue event as following:
    
-        stringCryption.initialize("password"); 		  
-	stringCryption.initialize("creditNumber"); 		  
-	stringCryption.initialize("socialSecurity");
+    stringCryption.initialize("password"); 		  
+    stringCryption.initialize("creditNumber"); 		  
+    stringCryption.initialize("socialSecurity");
  
    stringCryption.js is interface between front end public key encryption library and view layer (jsp) 
    this code as following:  
@@ -546,42 +546,108 @@
 
     public class AgentTableDto {
 
-	@NotBlank(message = "Username is required")
-	private String userName;
-	@NotBlank(message="password is required")
-	private String password;
+            @NotBlank(message = "Username is required")
+            private String userName;
+            @NotBlank(message="password is required")
+            private String password;
 
-	@Email(message = "Email is invalid", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
-	private String emailAddress;
+            @Email(message = "Email is invalid", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
+            private String emailAddress;
 	
-	@NotBlank(message="CreditNumber is required")
-	private String creditNumber;
+            @NotBlank(message="CreditNumber is required")
+            private String creditNumber;
 	
-	@NotBlank(message = "Credit Card Holder is required")
-	private String cardHolderName;
+            @NotBlank(message = "Credit Card Holder is required")
+            private String cardHolderName;
 	
-	@NotBlank(message = "Expired Date is required")
-	@DateTimeFormat(pattern = "mm/yy")
-	private String expiringDate;
+            @NotBlank(message = "Expired Date is required")
+            @DateTimeFormat(pattern = "mm/yy")
+            private String expiringDate;
 	
-	@NotBlank(message = "Security Code is required")
-	private String securityCode;
+            @NotBlank(message = "Security Code is required")
+            private String securityCode;
 	
-	@NotBlank(message = "Social Security Number is required")
-	private String socialSecurity;
-	@NotBlank(message = "SSO full name is required")
-	private String fullName;
+            @NotBlank(message = "Social Security Number is required")
+            private String socialSecurity;
+            @NotBlank(message = "SSO full name is required")
+            private String fullName;
 
-	private Boolean passwordMatched;
+            private Boolean passwordMatched;
 
-	private String message;
+            private String message;
     }
 
 ...
     
   Create JPA Model class AgentTable to access MySQL database (see full source code from download)
   
-  <img src="images/AgentTable_Model.png"  width="60%" height="60%">
+...
+    
+    package com.front.end.pk.encrypt.demo.model;
+
+    package com.front.end.pk.encrypt.demo.model;
+
+    import javax.persistence.Column;
+    import javax.persistence.Entity;
+    import javax.persistence.GeneratedValue;
+    import javax.persistence.Id;
+    import javax.persistence.Table;
+    import javax.persistence.UniqueConstraint;
+
+    import lombok.AllArgsConstructor;
+    import lombok.Builder;
+    import lombok.Data;
+    import lombok.NoArgsConstructor;
+    import org.hibernate.annotations.GenericGenerator;
+
+
+     @Data
+     @AllArgsConstructor
+     @NoArgsConstructor
+     @Builder
+  
+     @Entity
+      @Table(name = "agent_table", catalog = "agentdb", uniqueConstraints = {
+		@UniqueConstraint(columnNames = "email_address"),
+		@UniqueConstraint(columnNames = "user_name") })
+
+      public class AgentTable implements java.io.Serializable {
+
+            private static final long serialVersionUID=01L;
+            // Fields
+            @GenericGenerator(name = "generator", strategy = "increment")
+            @Id
+            @Column(name = "agentId", unique = true, nullable = false)
+            private Integer agentId;
+
+            @Column(name = "user_name", unique = true, nullable = false)
+            private String userName;
+
+            @Column(name = "password", nullable = false)
+            private String password;
+
+            @Column(name = "email_address", unique = true)
+            private String emailAddress;
+
+            @Column(name = "credit_number", unique = true)
+            private String creditNumber;
+
+            @Column(name = "credit_holder_name")
+            private String cardHolderName;
+
+            private String expiringDate;
+
+            private String securityCode;
+
+            @Column(name = "social_security", unique = true)
+            private String socialSecurity;
+
+            @Column(name = "full_name", unique = true)
+            rivate String fullName;
+
+     }
+
+...
   
   application.properties configure MySQL 
 ## spring.jpa.hibernate.ddl-auto = create if first time run this code
@@ -812,7 +878,42 @@
   
   <img src="images/save_mysql_table_data.png" width="50%" height="50%">
 
-## Demo Rest API postman picture 
+## Demo Rest API code and postman result
+  Create Simple Rest API to verify password by BCryptPasswordEncoder()
+  
+...
+   
+    @GetMapping("/checkPassword/{username}/{passwordPlainText}")
+    public ResponseEntity<AgentTableDto> checkPassword(@PathVariable String username,@PathVariable String passwordPlainText) {
+       try {
+            String bcryptedpwd=null;
+            log.info("bcryptedpwd="+bcryptedpwd);
+            Optional<AgentTable> agentTableOpt = agentTableRepository.findAgentTableByUserName(username);
+            if (agentTableOpt.isPresent()) {
+                AgentTable agentTable =agentTableOpt.get();
+                bcryptedpwd = agentTable.getPassword();
+                boolean checkResult = encoderService.checkPasswordExist(passwordPlainText,bcryptedpwd);
+
+                AgentTableDto agentTableDto= modelMapper.map(agentTable, AgentTableDto.class);
+                agentTableDto.setPasswordMatched(checkResult);
+                if (checkResult) {
+                    agentTableDto.setMessage("Entered Password:"+passwordPlainText+" is used for user:"+username);
+                } else {
+                    agentTableDto.setMessage("Entered Password:"+passwordPlainText+" is new for user:"+username);
+                }
+                return ResponseEntity.ok(agentTableDto);
+            }
+
+        } catch (PasswordException e) {
+
+            return new ResponseEntity<AgentTableDto>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<AgentTableDto>(HttpStatus.BAD_REQUEST);
+    }
+   
+...
+
+<img src="images/.png" width="60%" height="60%">
 
 # Conclusion
 
