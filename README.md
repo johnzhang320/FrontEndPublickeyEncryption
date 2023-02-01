@@ -652,7 +652,7 @@
 
 ...
 ## Basic Validation based on DTO condition annatation and @Valid 
-
+  Basic Validation for required field check and email check:
      
   <img src="images/BasicVaildation.png" width="50%" height="50%">  
      
@@ -661,27 +661,27 @@
          
 ...
 
-	                /**
-			 *  DTO Object -> Entity Object using ModelMapper
-			 *  save a lot of boilerplate code
-			 */
-			AgentTable agentTableDao = modelMapper.map(agentTableRequestDto,AgentTable.class);
-			AgentTableDemoDto agentTableDemoDto = modelMapper.map(agentTableRequestDto, AgentTableDemoDto.class);
+      /**
+      *  DTO Object -> Entity Object using ModelMapper
+      *  save a lot of boilerplate code
+      */
+      AgentTable agentTableDao = modelMapper.map(agentTableRequestDto,AgentTable.class);
+      AgentTableDemoDto agentTableDemoDto = modelMapper.map(agentTableRequestDto, AgentTableDemoDto.class);
 
-			/**
-			 *   Encrypt password , credit card number and social security number
-			 *   by javascript code which sent to agentTableRequestDto
-			 */
-			String encryptedPassword =agentTableRequestDto.getPassword();
-			String encryptedCreditCardNumber = agentTableRequestDto.getCreditNumber();
-			String encryptedSocialSecurityNumber = agentTableRequestDto.getSocialSecurity();
-			/**
-			 *  Decrypt password , credit card number and social security number
-			 *  by fepkeDecrpt method
-			 */
-			String passwordPlanText = encoderService.fepkeDecrpt(encryptedPassword);
-			String creditCardNumberPlanText =  encoderService.fepkeDecrpt(encryptedCreditCardNumber);
-			String socialSecurityNumberPlanText = encoderService.fepkeDecrpt(encryptedSocialSecurityNumber);
+      /**
+      *   Encrypt password , credit card number and social security number
+      *   by javascript code which sent to agentTableRequestDto
+      */
+      String encryptedPassword =agentTableRequestDto.getPassword();
+      String encryptedCreditCardNumber = agentTableRequestDto.getCreditNumber();
+      String encryptedSocialSecurityNumber = agentTableRequestDto.getSocialSecurity();
+      /**
+      *  Decrypt password , credit card number and social security number
+      *  by fepkeDecrpt method
+      */
+      String passwordPlanText = encoderService.fepkeDecrpt(encryptedPassword);
+      String creditCardNumberPlanText =  encoderService.fepkeDecrpt(encryptedCreditCardNumber);
+      String socialSecurityNumberPlanText = encoderService.fepkeDecrpt(encryptedSocialSecurityNumber);
 
 ...
 
