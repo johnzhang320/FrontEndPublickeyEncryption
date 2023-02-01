@@ -913,7 +913,13 @@
    
 ...
 
-<img src="images/.png" width="60%" height="60%">
+   Postman found existing user entered existed password
+
+   <img src="images/user_enter_new_password.png" width="60%" height="60%">
+
+   Postman found existing user entered new password
+
+   <img src="images/user_enter_repeated_password.png" width="60%" height="60%">
 
 # Conclusion
 
