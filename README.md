@@ -4,7 +4,7 @@
 
 ## Overview
 
-### Why and how do we apply frontend encryption ?
+### Why apply frontend encryption ?
    
    Https (TLS) be able to encrypt internet channel to prevent the hackers from stealing sensitive data in network, however, 
    some invaded viruses, like Trojan Horse and Active-X, still are able to sneak into your local machine to steal the data
@@ -12,13 +12,10 @@
       
    They are using keylogger to make system call to log the keystroke, recording critical javascript variables or using 
    hugh Hash Strings of 'Rainbow table' to guess your hashed password sent be UI
-      
-   We attempt to hide the sensitive form field variables and when we complete enter sensitive field and leave focus from 
-   the field, encrypt the data that you just entered, dynamically obtain pubic key from server to encrypt form field by 
-   javascript. 
 
+   Apply frontend encrypt to attempt from frontend to compress the room that such virus or attack to steal sensitive data
 
-### Why do we use Public Key to encrypt sensitive data in frontend?
+### Why use Public Key to encrypt sensitive data in frontend?
   
    First of all, some sensitive data such as BankAccount number and Social Security number must be decrypted in server 
    side for further business use. So apply public key cryptography to be able to decrypt those data to plain text in 
@@ -51,11 +48,27 @@
    In order to take advantage of BCryptPasswordEncoder, We can not SHA256 ot MD5 hash passwords in UI and use public key 
    to solve this problem.
    
+### How to apply the Frontend public key encryption  
+
+   When load signup page, JSP page load javascript encryption code and get public key from keypairmanger server, then register
+   sensitive data fields (HTML DOM Form Element), apply secure coding to prevent hacker from attack those data from javascript.
+   
+   As soon as user completes entering sensitive data into the fields and move cursor to leave the field, immediately encrypt 
+   the data that you just entered before user presses the 'submit' button. User submit page with encrypted cipher text of the
+   sensitive data to server
+   
+   Server uses keypairManager to decrypt the cipher text data and for password, it uses Spring Security BCryptPasswordEncoder to 
+   verify if the password is repeated for same user and encode new password to save to database
 
    
 # Project Structure   
    
-   <img src="images/project_structure.png" width="40%" height="40%">
+  <img src="images/project_structure.png" width="40%" height="40%">
+
+## Important Structure and files
+
+   <img src="images/important_directory_files.png" width="40%" height="40%">
+   
    
 # Running Environment and Development Tools 
 
@@ -506,10 +519,89 @@
   
   /FrontEndPublicKeyEncryption/getKeyPair.html will return (e,n) in asscii character format, this URL is 
   synchronized request
-     
+    
+## EncoderService code
+  Integrate all keyPair function and BCryptPasswordEncoder function
+  
+...
+
+    package com.front.end.pk.encrypt.demo.fepke_api;
+
+    import org.bouncycastle.openssl.PasswordException;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.security.crypto.password.PasswordEncoder;
+    import org.springframework.stereotype.Service;
+
+    @Service
+    public class EncoderService {
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    public String fepkeDecrpt(String fepkeEncryptedString) throws PasswordException{
+        if (fepkeEncryptedString==null) {
+           throw new PasswordException("fepkeEncryptedString is required");
+        }
+        return KeyPairManager.getInstance().decrypt(fepkeEncryptedString);
+     }
+
+    public String getFepkePublicKey() throws Exception{
+        return KeyPairManager.getInstance().getKeyPair().getPublic().toString();
+    }
+
+    public  boolean checkPasswordExist(String passwordPlainText, String passwordBcryptString) throws PasswordException{
+        if (passwordPlainText==null) {
+           throw new PasswordException("Raw Password is required");
+        }
+        if (passwordBcryptString==null) {
+           throw new PasswordException("BCrypt Encoded Password is required");
+        }
+    /**
+        *  matchResult variable is working for debug
+        */
+       boolean matchResult = passwordEncoder.matches(passwordPlainText,passwordBcryptString);
+       return  matchResult;
+   }
+
+   public String bcryptEncodingPassword (String passwordPlainText) throws PasswordException {
+       if (passwordPlainText == null) {
+           throw new PasswordException("Raw Password is required");
+       }
+       return passwordEncoder.encode(passwordPlainText);
+   }
+
+}
+
+
+...
+
+
+## Rest API for getKeyPair.html and Key Session creation
+
+...
+
+	@RequestMapping(value="/getKeyPair.html", method=RequestMethod.GET)
+	public void getKeypairGet(HttpServletRequest request,HttpServletResponse response) {
+		String keyString ="";
+		try {
+		    log.info("doGet() Begin:");
+		    KeyPair keys = KeyPairManager.getInstance().getKeyPair();
+		    request.getSession().setAttribute(Constants.KEY_PAIR, keys);  		    
+		    keyString =  KeyPairManager.getInstance().getKeyString();		   
+		    response.getOutputStream().print(keyString);  
+		    
+		} catch (Exception e) {
+		    log.info("Generate Key Failed because of "+e.getMessage());
+				keyString="Generate Key Failed because of "
+				+e.getMessage();
+		}
+		 log.info("doGet() End:");
+		 return ;
+	}
+...
+
 
     
-# Secure Consideration for javascript to encrypt sensitive data 
+## Secure Consideration for javascript to encrypt sensitive data 
     
  We use fronten Public Key to encrypt sensitive data, maybe people ask when the pass sensitive data to 
  encrypt method into the library, we need variable to contain the data, using Chrome Inspect->Source or
