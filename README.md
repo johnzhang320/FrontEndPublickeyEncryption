@@ -606,6 +606,11 @@
 
 ...  
    
+  when set spring.jpa.hibernate.ddl-auto = create, create table structure in mysql:
+
+  <img src="images/agentTable_structure_in_mysql.png"  width="60%" height="60%">
+  
+
 ## (8) User enters data include password, bank account and social security 
 
 ### Below diagram show that the user type password and cursor is still in password field 
