@@ -660,7 +660,7 @@
 ## Basic Validation based on DTO condition annatation and @Valid 
 
      
-  <img src="images/BasicVaildation.png" width="50%" height="50%">  
+  <img src="images/BasicValidation.png" width="50%" height="50%">  
      
 ## (14)  Mapper DTO to Model and Decrypt the data  
        
