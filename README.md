@@ -159,22 +159,22 @@
 
   ![](images/FrontEndPublicKeyEncryptionDetail.jpg)
   
-  ## We will explain each workflow arrow's function with sequence No. (1), (2),(3).....(21) by description, code and demo
+ ## We will explain each workflow arrow's function with sequence No. (1), (2),(3).....(21) by description, code and demo
   
  
   
-  ## (1) Signup Request 
+ ## (1) Signup Request 
      
      
-     http://localhost:8080/FrontEndPublicKeyEncryption/signup
+   http://localhost:8080/FrontEndPublicKeyEncryption/signup
       
-     FrontEndPublicKeyEncryption is defined as contextPath in application.properties
+   FrontEndPublicKeyEncryption is defined as contextPath in application.properties
       
-     server.servlet.contextPath=/FrontEndPublicKeyEncryption
+   server.servlet.contextPath=/FrontEndPublicKeyEncryption
       
-     If apply Spring Security, run any web page popout its default login page, before Spring Boot 2.7.8, we can use 
-     WebSecurityConfigurerAdapter disable default login page and allow /signup and /getKeypair.html to work without 
-     authentication 
+   If apply Spring Security, run any web page popout its default login page, before Spring Boot 2.7.8, we can use 
+   WebSecurityConfigurerAdapter disable default login page and allow /signup and /getKeypair.html to work without 
+   authentication:
       
       
 ...
@@ -337,20 +337,29 @@
 
  ## (3) Load stringCryption.js by JSP, (5) request public key , (6) register sensitive data
  
-   from FrontEndCryptionDemo.jsp we can see we load and run stringCryption.js, this is my interface code
-   at this stage it finished: 
+   From FrontEndCryptionDemo.jsp, we can see we load and run stringCryption.js, this is my interface code
+   at this stage it finish following task: 
    
-   send request to Rest API to call KeyPairManager to get public key by the method:
-   stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html")  
+   Send request to Rest API to call KeyPairManager to get public key by the method:
+   
+   ...
+   
+       stringCryption.getPublicKey("/FrontEndPublicKeyEncryption/getKeyPair.html")  
+   
+   ...
    
    Then it uses initialize() method to register sensitive data for further key blue event as following:
    
-        stringCryption.initialize("password"); 		  
-	stringCryption.initialize("creditNumber"); 		  
-	stringCryption.initialize("socialSecurity");
- 
+   ...
+   
+       stringCryption.initialize("password"); 		  
+       stringCryption.initialize("creditNumber"); 		  
+       stringCryption.initialize("socialSecurity");
+       
+   ...
+   
    stringCryption.js is interface between front end public key encryption library and view layer (jsp) 
-   this code as following:  
+   full javascript code as following:  
     
 ...
 
@@ -428,6 +437,9 @@
   
 ## (4) KeyPairManager generates Public Key pair (e,n) and Private Key pair(d,n)
 
+  KayPairManager is using jCryptionUtil.generateKeypair() to generate key pair
+  now it must be supported by JDK 1.8, full class code as following:
+  
 ...
 
      package com.front.end.pk.encrypt.demo.fepke_api;
@@ -497,7 +509,9 @@
   
   
    
-  ## (5) An sample to explain Public Key RSA Cryptography 
+## (5) An sample to explain Public Key RSA Cryptography 
+  
+  In order to understand KeyPair, following example explain Public Key RSA Cryptography graphically:  
   
   <img src="images/RSA_Cryptography.png" width="60%" height="80%">
 
@@ -511,20 +525,23 @@
     
 # Secure Consideration for javascript to encrypt sensitive data 
     
- We use fronten Public Key to encrypt sensitive data, maybe people ask when the pass sensitive data to 
- encrypt method into the library, we need variable to contain the data, using Chrome Inspect->Source or
- other debug way we can easily find sensitive data like password from that variable
+ We use frontend Public Key to encrypt sensitive data, maybe people will ask that passing sensitive data to 
+ encrypt method in the library, we need variable to contain the plaintext data, using Chrome Inspect->Source
+ or other debug tools, we can easily find sensitive data like password from the argument variable
     
 ### Thanks for JQuery provides $(elementId).val() method!
-   With it , we can hide data from Javascript debug. We have piece of code StringCryption.js for key bur 
-   event, especially we separate elementId literal string variable and id representive symbol
-   "#" and cacatenated together 
-    
-   $("#"+elementId).val() , elementId variable only contain Id name "password" , "banckAccountNo" instead 
-   of id's value
+   Using it , we can hide data in Javascript from debug. We created a piece of code in StringCryption.js,
+   which works for key bur event, we dynamically cacatenate "#" with DOM Element Id Name as JQuery Selector
+   plus val() method to protect sensitive data from debug tool 'hover' the value.
+   
+   In the stringCryption.encrypt and library encrypt method, I use following code to convey the sensitive data
+  
+   $("#"+elementId).val()
+   
+   where 'elementId' variable only contains DOM element Id Name such as "password" , "banckAccountNo" not Id's value
     
    Chrome "inspect"->"source" can not see such sensitive data any more, HOVER either the 'elementId' or 
-   val() , debug can not find the value ! 
+   val() , debug can not find the value as following:
     
    <img src="images/JQuery_Cacatenated_ElementId_Val.png" width="70%" height="70%">
    
@@ -586,19 +603,22 @@
   application.properties configure MySQL 
 ## spring.jpa.hibernate.ddl-auto = create if first time run this code
 
-  spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-  spring.datasource.url = jdbc:mysql://localhost:3306/agentdb
-  spring.datasource.username = root
-  spring.datasource.password = mypassword
-  spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+...
 
-### spring.jpa.hibernate.ddl-auto =update
-   spring.jpa.generate-ddl=true
-   spring.jpa.show-sql = true
+    spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+    spring.datasource.url = jdbc:mysql://localhost:3306/agentdb
+    spring.datasource.username = root
+    spring.datasource.password = mypassword
+    spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
 
-   logging.level.org.hibernate.SQL=I NFO
-   logging.level.org.hibernate.type=INFO
-  
+    spring.jpa.hibernate.ddl-auto =update
+    spring.jpa.generate-ddl=true
+    spring.jpa.show-sql = true
+
+    logging.level.org.hibernate.SQL=I NFO
+    logging.level.org.hibernate.type=INFO
+    
+...  
    
 ## (8) User enters data include password, bank account and social security 
 
@@ -654,7 +674,7 @@
 ## Basic Validation based on DTO condition annatation and @Valid 
   Basic Validation for required field check and email check:
      
-  <img src="images/BasicVaildation.png" width="50%" height="50%">  
+  <img src="images/BasicValidation.png" width="50%" height="50%">  
      
 ## (14)  Mapper DTO to Model and Decrypt the data  
        
@@ -716,7 +736,10 @@
   to see if people entered same password for same user, if validation is passed , return
   exist entity to get primary key agentId, if it is invalided, handling bindingResult to
   ensure error message occurs in same signup webpage
+  
 ...
+
+
     @Slf4j
     @Service
     public class AgentTableService {
@@ -760,11 +783,11 @@
 
 ...
 
-    /**
-     *  if the record exists for this username, means this time update exist record
-     */
+       /**
+        *  if the record exists for this username, means this time update exist record
+        */
         if (existAgentTable!=null) {
-                agentTableDao.setAgentId(existAgentTable.getAgentId());
+            agentTableDao.setAgentId(existAgentTable.getAgentId());
         }
         /**
          * Save bcrypt encoded password to database by agentTableDao
@@ -790,56 +813,11 @@
 ...
 
 
-
-## Getting Started
-
-### Dependencies
-
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
-
-### Installing
-
-* How/where to download your program
-* Any modifications needed to be made to files/folders
-
-### Executing program
-
-* How to run the program
-* Step-by-step bullets
-```
-code blocks for commands
-```
+# Conclusion
+ 
 ## Source code download
    https://github.com/johnzhang320/front-end-public-key-encryption
-## Help
-
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
-
-## Authors
-
-Contributors names and contact info
-
-ex. Dominique Pizzie  
-ex. [@DomPizzie](https://twitter.com/dompizzie)
-
-## Version History
-
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
-    * Initial Release
-
-## License
-
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
-
-## Acknowledgments
-
+ 
        
         
 
