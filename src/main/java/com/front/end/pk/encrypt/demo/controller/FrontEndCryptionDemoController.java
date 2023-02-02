@@ -2,26 +2,22 @@ package com.front.end.pk.encrypt.demo.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
 import com.front.end.pk.encrypt.demo.dto.AgentTableDemoDto;
 import com.front.end.pk.encrypt.demo.dto.AgentTableDto;
+import com.front.end.pk.encrypt.demo.exception.MyPasswordException;
 import com.front.end.pk.encrypt.demo.fepke_api.EncoderService;
 import com.front.end.pk.encrypt.demo.model.AgentTable;
 import com.front.end.pk.encrypt.demo.repository.AgentTableRepository;
 import com.front.end.pk.encrypt.demo.services.AgentTableService;
 import com.front.end.pk.encrypt.demo.services.Constants;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.openssl.PasswordException;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.ui.Model;
 import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.Optional;
 
 /**
 * Class level Controller for login form controlling
@@ -31,20 +27,18 @@ import java.util.Optional;
 @Slf4j
 @Controller
 @RequestMapping("/")
+@RequiredArgsConstructor
 public class FrontEndCryptionDemoController {
    // Logger LOG = Logger.LoggerFactory.getLogger( FrontEndCryptionDemoController.class);
 
-	@Autowired
-	EncoderService encoderService;
+	private final EncoderService encoderService;
 
-	@Autowired
-	AgentTableService agentTableService;
+	private final AgentTableService agentTableService;
 
-	@Autowired
-	private ModelMapper modelMapper;
+	//private final AgentTableMapper agentTableMapper;
 
-	@Autowired
-	AgentTableRepository agentTableRepository;
+	private final ModelMapper modelMapper;
+	private final AgentTableRepository agentTableRepository;
 
 	@RequestMapping(value="/signup",method = RequestMethod.GET)
 	public ModelAndView signupForm(ModelAndView modelAndView)
@@ -75,7 +69,9 @@ public class FrontEndCryptionDemoController {
 			 *  save a lot of boilerplate code
 			 */
 			AgentTable agentTableDao = modelMapper.map(agentTableRequestDto,AgentTable.class);
-			AgentTableDemoDto agentTableDemoDto = modelMapper.map(agentTableRequestDto, AgentTableDemoDto.class);
+			AgentTableDemoDto agentTableDemoDto = modelMapper.map(agentTableRequestDto,AgentTableDemoDto.class);
+			//AgentTable agentTableDao = agentTableMapper.fromDto(agentTableRequestDto);
+			//AgentTableDemoDto agentTableDemoDto = agentTableMapper.toAgentTableDemoDto(agentTableRequestDto);
 
 			/**
 			 *   Encrypt password , credit card number and social security number
@@ -107,7 +103,7 @@ public class FrontEndCryptionDemoController {
 													agentTableRequestDto.getUserName(),
 													passwordPlanText);
 
-			} catch (PasswordException ex) {
+			} catch (MyPasswordException ex) {
 				bindingResult.addError(new FieldError("AgentTableRequestDto", "password",
 						ex.getMessage()));
 				return modelAndViewError;

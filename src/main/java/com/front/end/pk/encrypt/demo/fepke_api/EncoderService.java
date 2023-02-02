@@ -1,7 +1,9 @@
 package com.front.end.pk.encrypt.demo.fepke_api;
 
-import org.bouncycastle.openssl.PasswordException;
+import com.front.end.pk.encrypt.demo.exception.MyPasswordException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +12,9 @@ public class EncoderService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public String fepkeDecrpt(String fepkeEncryptedString) throws PasswordException{
+    public String fepkeDecrpt(String fepkeEncryptedString) throws MyPasswordException {
         if (fepkeEncryptedString==null) {
-            throw new PasswordException("fepkeEncryptedString is required");
+            throw new MyPasswordException("fepkeEncryptedString is required");
         }
         return KeyPairManager.getInstance().decrypt(fepkeEncryptedString);
     }
@@ -21,12 +23,12 @@ public class EncoderService {
         return KeyPairManager.getInstance().getKeyPair().getPublic().toString();
     }
 
-    public  boolean checkPasswordExist(String passwordPlainText, String passwordBcryptString) throws PasswordException{
+    public  boolean checkPasswordExist(String passwordPlainText, String passwordBcryptString) throws MyPasswordException{
         if (passwordPlainText==null) {
-            throw new PasswordException("Raw Password is required");
+            throw new MyPasswordException("Raw Password is required");
         }
         if (passwordBcryptString==null) {
-            throw new PasswordException("BCrypt Encoded Password is required");
+            throw new MyPasswordException("BCrypt Encoded Password is required");
         }
         /**
          *  matchResult variable is working for debug
@@ -35,9 +37,9 @@ public class EncoderService {
         return  matchResult;
     }
 
-    public String bcryptEncodingPassword (String passwordPlainText) throws PasswordException {
+    public String bcryptEncodingPassword (String passwordPlainText) throws MyPasswordException {
         if (passwordPlainText == null) {
-            throw new PasswordException("Raw Password is required");
+            throw new MyPasswordException("Raw Password is required");
         }
         return passwordEncoder.encode(passwordPlainText);
     }

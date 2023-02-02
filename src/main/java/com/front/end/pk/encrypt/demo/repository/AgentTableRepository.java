@@ -13,4 +13,6 @@ public interface AgentTableRepository extends JpaRepository<AgentTable,Integer> 
     Optional<AgentTable> findAgentTableByCreditNumber(String creditNumber);
 
     Optional<AgentTable> findAgentTableByUserName(String UserName);
+
+
 }
